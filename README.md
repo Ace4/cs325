@@ -1,11 +1,12 @@
-cs325
-=====
+# CS 325 - Algorithms
+
 Collaborators:
-  Aaron Egger 
-  John Cargil 
-  Scott Malizio
+-  Aaron Egger
+-  John Cargill
+-  Scott Malizio
 
-
+## This repo contains solutions to CS 325 homework problems. 
+### Don't plagiarize.
 
 
 
