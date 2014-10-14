@@ -1,4 +1,4 @@
-lines = [-2, -1, 0, 1, 2], [2, 1, 0, 1, 2]
+lines = [-2, -1, 0, 1, 2], [9, 27, 54, 95, 96]
 num_lines = len(lines[0])
 
 slopes = []
@@ -18,18 +18,9 @@ for m in range(2, num_lines):
 	j = m-2
 	i = m-1
 	k = m 
-	YjYk = slopes[j]*(intercepts[j] - intercepts[k]) 
-	YiYk = slopes[i]*(intercepts[j] - intercepts[k])
-	if(YjYk > YiYk):
+	YjYk = slopes[j]*(intercepts[j] - intercepts[k]) + intercepts[j]*(slopes[k] - slopes[j])
+	YiYk = slopes[i]*(intercepts[j] - intercepts[k]) + intercepts[i]*(slopes[k] - slopes[j])
+	if(YjYk >= YiYk):
 		visible[i] = False 
 
 print visible
-
-
-
-
-
-
-
-
-	#print "y = " + repr(slopes[i]) + "x + " + repr(intercepts[i])
