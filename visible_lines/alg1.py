@@ -14,7 +14,7 @@ for i in range(0, num_lines):
 if len(slopes) < 3:
 	exit()								#all lines are visible in this case
 
-for k in range(2, num_lines):
+for k in range(2, num_lines):			#check visibility of all triplets where i<j<k
 	for i in range(1, num_lines-1):
 		for j in range(0, num_lines-2):
 			if(j < i < k):
