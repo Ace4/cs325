@@ -1,13 +1,14 @@
 from random import randrange
 from time import clock
 
-num_lines = 1000
+num_lines = 50
 if num_lines < 3:
 	exit()								#all lines are visible in this case
 
 slopes = []
 intercepts = []
 visible = []
+
 
 #generate unique random lines
 def genLines(n):
@@ -35,9 +36,15 @@ def alg1(n):
 					if(YjYk > YiYk):
 						visible[i] = False
 
-genLines(num_lines)
-t0 = clock()
-alg1(num_lines)
-t1 = clock()
-
-print t1 - t0
+while num_lines in range (0, 900):
+	genLines(num_lines)
+	t0 = clock()
+	alg1(num_lines)
+	t1 = clock()
+	
+	print num_lines
+	print t1 - t0
+	slopes = []
+	intercepts = []
+	visible = [] 
+	num_lines += 100

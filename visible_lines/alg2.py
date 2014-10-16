@@ -1,20 +1,19 @@
 from random import randrange
 from time import clock
 
-num_lines = 300
-if num_lines < 3:
-	exit()								#all lines are visible in this case
+
+num_lines = 50
 
 slopes = []
 intercepts = []
 visible = []
 
-#generate unique random lines
+	#generate unique random lines
 def genLines(n):
 	for i in range(0, n):	
-		rand_slope = randrange(-n,n);
+		rand_slope = randrange(-n,n)
 		while slopes.count(rand_slope) != 0:
-			rand_slope = randrange(-n,n);
+			rand_slope = randrange(-n,n)
 
 		slopes.append(rand_slope)
 		intercepts.append(randrange(-n, n))
@@ -36,9 +35,15 @@ def alg2(n):
 						if(YjYk > YiYk):
 							visible[i] = False
 
-genLines(num_lines)
-t0 = clock()
-alg2(num_lines)
-t1 = clock()
+while num_lines in range(0, 1000):
+	genLines(num_lines)
+	t0 = clock()
+	alg2(num_lines)
+	t1 = clock()
 
-print t1 - t0
+	print t1 - t0
+	num_lines = num_lines + 100; 
+	slopes = []
+	intercepts = []
+	visible = []
+

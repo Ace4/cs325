@@ -1,9 +1,9 @@
 from random import randrange
 from time import clock 
 
-num_lines = 900
-if num_lines < 3:
-	exit() 
+num_lines = 3000
+#if num_lines < 3:
+#	exit() 
 
 slopes = []
 intercepts = []
@@ -39,9 +39,6 @@ def alg1(n):
 			visible[i] = False 
 
 def alg2(n):
-        for i in range(0, n):
-                visible.append(True)                            #mark each line as visible
-
         for k in range(2, n):                                   #check visibility of all triplets where i<j<k
                 for i in range(1, n-1):
                         if visible[i]:
@@ -53,10 +50,17 @@ def alg2(n):
                                                         visible[i] = False
 
 
-genLines(num_lines)
-t0 = clock()
-alg1(num_lines)
-alg2(num_lines)
-t1 = clock()
+while num_lines in range(0,20001):
+	genLines(num_lines)
+	t0 = clock()
+	alg1(num_lines)
+	alg2(num_lines)
+	t1 = clock()
 
-print t1 - t0
+	slopes = []
+	intercepts = [] 
+	visible = []
+		
+	print num_lines 
+	print t1 - t0
+	num_lines += 100
