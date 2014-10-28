@@ -1,6 +1,6 @@
 class Line:
-	def __init__(self, slope, intercept, visible, domain):
-		self.m = slope
-		self.b = intercept
-		self.vis = visible
-		self.dom = domain
+	def __init__(self):
+		self.m = 0
+		self.b = 0
+		self.vis = True
+		self.dom = [0,0]
