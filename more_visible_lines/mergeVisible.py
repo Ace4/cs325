@@ -30,7 +30,9 @@ def intercept(l1,l2):
 
 def mergeLeft(L,R):
 	for i in range(0, len(L)):
-		if(len(L) == 1):
+		if(i == 0):
+			Lx1 = 'inf'
+		elif(len(L) == 1):
 			Lx1 = 'inf'
 			Lx2 = 'inf'
 		else:
@@ -53,45 +55,64 @@ def mergeLeft(L,R):
 				Rx2 = intercept(R[k],R[k+1])
 			R[k].dom = [Rx1,Rx2]
 			if((L[i].dom[0] <= R[k].dom[0] <= L[i].dom[1]) or (L[i].dom[0] <= R[k].dom[1] <= L[i].dom[i]) or  L[i].dom[0] == 'inf' or
-			    L[i].dom[1] == 'inf' or R[k].dom[0] == 'inf' or R[k].dom[1] == 'inf' ):
+			    L[i].dom[1] == 'inf' or R[k].dom[0] == 'inf' or R[k].dom[1] == 'inf'):
 				j = i -1
 	                        Yjxjk = L[j].m * (L[j].b - R[k].b) + L[j].b * (R[k].m - L[j].m)
 	                        Yixjk = L[i].m * (L[j].b - R[k].b) + L[i].b * (R[k].m - L[j].m)
  	       	                if(Yjxjk > Yixjk):
-        	    		       	for z in range(i,len(L)):
-        		                       	L[z].vis = False
+        	    			L[i].vis = False
+				       	for z in range(i,len(L)):
+        		                      	L[z].vis = False
 					return
 
 def mergeRight(L,R):
 	for i in range(len(R)-2,-1,-1):
 	
-		if(len(R) <= 1):
+		if(i == 0):
+			Rx1 = 'inf'
+		elif(len(R) == 1):
 			Rx1 = 'inf'
 			Rx2 = 'inf'
+			return
 		else:
-			Rx1 = intercept(R[i],R[i-1])
-		if(i > len(R)-1):
+			if(R[i].dom[0] == 'inf'):
+				Rx1 = intercept(R[i],R[i-1])
+			else:
+				Rx1 = R[i].dom[0]
+		if(i == len(R)-1):
 			Rx2 = 'inf'
 		else:
-	        	Rx2 = intercept(R[i],R[i+1])
+			if(R[i].dom[1] == 'inf'):
+	    			Rx2 = intercept(R[i],R[i+1])
+			else:
+				Rx2 = R[i].dom[1]
 	        R[i].dom = [Rx1,Rx2]	     
-		for j in range(0,len(L)-1):
-			if(len(L) <= 1):
+		for j in range(0,len(L)):
+			if(j == 0):
+				Lx1 = 'inf'
+			elif(len(L) == 1):
 				Lx1 = 'inf'
 				Lx2 = 'inf'
 			else:
-		        	Lx1 = intercept(L[j],L[j-1])
-	                if(j == len(L)):
+		 		if(L[j].dom[0] == 'inf'):
+			       		Lx1 = intercept(L[j],L[j-1])
+	                	else:
+					Lx1 = L[j].dom[0]
+			if(j == len(L)-1):
 				Lx2 = 'inf'
 			else:	
-				Lx2 = intercept(L[j],L[j+1])
+				if(L[j].dom[1] == 'inf'):
+					Lx2 = intercept(L[j],L[j+1])
+				else:
+					Lx2 = L[j].dom[1]
 	                L[j].dom = [Lx1,Lx2]
 	                if((R[i].dom[0] <= L[j].dom[0] <= R[i].dom[1]) or (R[i].dom[0] <= L[j].dom[1] <= R[i].dom[1]) or L[j].dom[0] == 'inf' or
 			    L[j].dom[1] == 'inf' or R[i].dom[0] == 'inf' or R[i].dom[1] == 'inf' ):
-	                	k = i + 1
+	                	k = i + 1 
 				Yjxjk = L[j].m * (L[j].b - R[k].b) + L[j].b * (R[k].m - L[j].m)
 	                        Yixjk = R[i].m * (L[j].b - R[k].b) + R[i].b * (R[k].m - L[j].m)
 	                        if(Yjxjk > Yixjk):
+					R[i].vis = False
         	                	for z in range(0,i):
         	                        	R[z].vis = False
         	                        return
@@ -107,13 +128,13 @@ def alg4(Y):
 	n = len(Y)
 	l = int(math.floor(n/2))
 	print "n-l = " + repr(n-l) + " l= " +repr(l) 
-	for i in range(0,n-l):
+	for i in range(0,l):
 		#print "i = " + repr(i)
 		x = Line()	
 		L.append(x)
 		L[i] = Y[i]
-	for i in range(0,l):
-		j = i + l 
+	for i in range(0,n-l):
+		j = i + l
 		x = Line()
 		R.append(x)
 		R[i] = Y[j]		
@@ -122,9 +143,9 @@ def alg4(Y):
 	 	mergeLines(L,R)
 		return L
 	else: 
-		for i in range(0,n-l):
+		for i in range(0,l):
 			print "L[i] = " + repr(L[i].m)
-		for j in range(0,l):
+		for j in range(0,n-l):
 			print "R[j] = " + repr( R[j].m)
 		mergeLines(alg4(L),alg4(R))
 		L.extend(R)
@@ -162,21 +183,21 @@ L = []
 R = [] 
 #for i in range (0,num_lines):
 #	print repr(l[i].m) + ',' + repr(l[i].b)
-slopesN = [-1,0,1]
-interceptsN = [3,0,-1]
+slopesN = [0,1,2]
+interceptsN = [54,95,96]
 visibleN = []
 n = len(slopesN)
 alg2(n,slopesN,interceptsN,visibleN)
 print visibleN
 print slopesN
 print interceptsN
-slopesX = [-1,0]
-interceptsX = [3,0]
-visibleX = [True]
+slopesX = [-2,-1]
+interceptsX = [0,0]
+visibleX = [True,True]
 
-slopesY = [1]
-interceptsY = [-1]
-visibleY =[True,True]
+slopesY = [0,1,2]
+interceptsY = [0,0,0]
+visibleY =[True,True,True]
 
 for i in range(0,len(slopesX)):
       	x = Line()
