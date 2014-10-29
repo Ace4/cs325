@@ -3,4 +3,4 @@ class Line:
 		self.m = 0
 		self.b = 0
 		self.vis = True
-		self.dom = [1,0]
+		self.dom = ['inf','inf']
