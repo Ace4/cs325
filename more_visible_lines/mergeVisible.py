@@ -29,25 +29,25 @@ def intercept(l1,l2):
 	return z
 
 def mergeLeft(L,R):
-	for i in range(1, len(L)):
-		if(len(L) < 2):
+	for i in range(0, len(L)):
+		if(len(L) == 1):
 			Lx1 = 'a'
 			Lx2 = 'a'
 		else:
 			Lx1 = intercept(L[i],L[i-1])
-		if(len(L) < 3):
+		if(i == len(L)-1):
 			Lx2 = 'a'	
 		else:
 			Lx2 = intercept(L[i],L[i+1]) 
 		L[i].dom = [Lx1, Lx2]
 		for k in range(0,len(R)):
-			if(len(R) < 2):
+			if(len(R) == 1):
 				Rx1 = 'a'
 				Rx2 = 'a'
 			else:
 				Rx1 = intercept(R[k],R[k-1])
 				
-			if(len(R) < 3):
+			if(k == len(R)-1):
 				Rx2 = 'a'
 			else:
 				Rx2 = intercept(R[k],R[k+1])
@@ -63,32 +63,33 @@ def mergeLeft(L,R):
 				return
 
 def mergeRight(L,R):
-	for i in range(len(R)-2,0,-1):
-		if(len(R) < 2):
+	for i in range(len(R)-2,-1,-1):
+	
+		if(len(R) <= 1):
 			Rx1 = 'a'
 			Rx2 = 'a'
 		else:
 			Rx1 = intercept(R[i],R[i-1])
-		if(len(R) < 3):
+		if(i > len(R)-1):
 			Rx2 = 'a'
 		else:
 	        	Rx2 = intercept(R[i],R[i+1])
-	        R[i].dom = [Rx1,Rx2]
-	        for j in range(0,len(L)):
-			if(len(L) < 2):
+	        R[i].dom = [Rx1,Rx2]	     
+		for j in range(0,len(L)-1):
+			if(len(L) <= 1):
 				Lx1 = 'a'
 				Lx2 = 'a'
 			else:
 		        	Lx1 = intercept(L[j],L[j-1])
-	                if(len(L) < 3):
+	                if(j == len(L)):
 				Lx2 = 'a'
 			else:	
 				Lx2 = intercept(L[j],L[j+1])
 	                L[j].dom = [Lx1,Lx2]
 	                if((R[i].dom[0] <= L[j].dom[0] <= R[i].dom[1]) or (R[i].dom[0] <= L[j].dom[1] <= R[i].dom[1]) or L[j].dom[0] == 'a' or
 			    L[j].dom[1] == 'a' or R[i].dom[0] == 'a' or R[i].dom[1] == 'a' ):
-	        	        k = i+1
-	                	Yjxjk = L[j].m * (L[j].b - R[k].b) + L[j].b * (R[k].m - L[j].m)
+	                	k = i + 1
+				Yjxjk = L[j].m * (L[j].b - R[k].b) + L[j].b * (R[k].m - L[j].m)
 	                        Yixjk = R[i].m * (L[j].b - R[k].b) + R[i].b * (R[k].m - L[j].m)
 	                        if(Yjxjk > Yixjk):
         	                	for z in range(0,i):
@@ -97,30 +98,39 @@ def mergeRight(L,R):
 def mergeLines(L,R):
 	mergeLeft(L,R)
 	mergeRight(L,R) 
-	return L.extend(R)
+	L.extend(R)
+	return L
 
 def alg4(Y):
 	L = []
 	R = []
 	n = len(Y)
 	l = int(math.floor(n/2))
+	print "n-l = " + repr(n-l) + " l= " +repr(l) 
 	for i in range(0,l):
-		x = Line()
+		#print "i = " + repr(i)
+		x = Line()	
 		L.append(x)
 		L[i] = Y[i]
-	i = 0
-	for j in range(l,n):
+	for i in range(0,n-l):
+		j = i + l 
 		x = Line()
 		R.append(x)
-		R[i] = Y[j]
-		++i		
+		R[i] = Y[j]		
 		
-	if(n <= 4):
+	if(n <= 2):
+		return Y
+	elif(n <= 4):
 	 	mergeLines(L,R)
-		return L.extend(R)
+		return L
 	else: 
-		alg4(L)	
-		alg4(R)
+		for i in range(0,l):
+			print "L[i] = " + repr(L[i].m)
+		for j in range(0,n-l):
+			print "R[j] = " + repr( R[j].m)
+		mergeLines(alg4(L),alg4(R))
+		L.extend(R)
+		return L
 
 def alg2(n,slopes,intercepts,visible):
 	for i in range(0,n):
@@ -133,47 +143,6 @@ def alg2(n,slopes,intercepts,visible):
                                                	YiYk = slopes[i]*(intercepts[j] - intercepts[k]) + intercepts[i]*(slopes[k] - slopes[j])
 						if( YjYk > YiYk):
                                                         visible[i] = False
-
-#def mergeVisible(L, R):
-	 
-
-	
-def mergeVisibleRecursive(slopesLeft, interceptsLeft,visibleLeft,slopesRight,interceptsRight,visibleRight, i):
-	a = len(slopesLeft)
-	b = len(slopesRight) -1
-	if(i < a-1): 
-		if (visibleLeft[i-1] == False):
-			visibleLeft[i] = False
-			z = i +1 
-			mergeVisibleRecursive(slopesLeft,interceptsLeft,visibleLeft,slopesRight,interceptsRight,visibleRight,z)
-		else:
-			for k in range (0, b):
-				j = i-1  
-				YjYk = slopesLeft[j]*(interceptsLeft[j] - interceptsRight[k]) + interceptsLeft[j]*(slopesRight[k] - slopesLeft[j])
-				YiYk = slopesLeft[i]*(interceptsLeft[j] - interceptsRight[k]) + interceptsLeft[i]*(slopesRight[k] - slopesLeft[j])
-				if( YjYk  >YiYk):
-					visibleLeft[i] = False
-					break
-			z = i+1
-			mergeVisibleRecursive(slopesLeft,interceptsLeft,visibleLeft,slopesRight,interceptsRight,visibleRight,z)		
-	if(i <= b):
-		bi = b - i 
-		if(visibleRight[bi+1] == False):
-			visibleRight[bi] = False
-			z = i+1
-			mergeVisibleRecursive(slopesLeft,interceptsLeft,visibleLeft,slopesRight,interceptsRight,visibleRight,z)
-		else:
-			for j in range(0,a):
-				k = bi+1
-				YjYk = slopesLeft[j]*(interceptsLeft[j] - interceptsRight[k]) + interceptsLeft[j]*(slopesRight[k] - slopesLeft[j])
-				YiYk = slopesRight[bi]*(interceptsRight[j] - interceptsLeft[k]) + interceptsRight[bi]*(slopesLeft[k] - slopesRight[j])
-				if(YjYk > YiYk):
-					visibleRight[bi] = False
-					break
-			z = i+1
-			mergeVisibleRecursive(slopesLeft, interceptsLeft,visibleLeft, slopesRight,interceptsRight,visibleRight,z)
-	else:
-		return
 
 #slopesA =[-2,-1,0,1,2]
 #interceptsA = [0,0,0,0,0]
@@ -195,20 +164,21 @@ L = []
 R = [] 
 #for i in range (0,num_lines):
 #	print repr(l[i].m) + ',' + repr(l[i].b)
-slopesN = [-2,-1,0,1,2,3,4,5,6,7]
-interceptsN = [0,0,0,0,0,1,1,1,1,1]
+slopesN = [-1,0,1]
+interceptsN = [3,0,-1]
 visibleN = []
 n = len(slopesN)
 alg2(n,slopesN,interceptsN,visibleN)
 print visibleN
+print slopesN
+print interceptsN
+slopesX = [-1,0]
+interceptsX = [3,0]
+visibleX = [True]
 
-slopesX = [-2,-1,0,1,2]
-interceptsX = [0,0,0,0,0]
-visibleX = [True,True,True,True,True]
-
-slopesY = [3,4,5,6,7]
-interceptsY = [1,1,1,1,1]
-visibleY =[True,True,True,True,True]
+slopesY = [1]
+interceptsY = [-1]
+visibleY =[True,True]
 
 for i in range(0,len(slopesX)):
       	x = Line()
@@ -223,7 +193,7 @@ for j in range(0,len(slopesY)):
 	R[j].b = interceptsY[j]
 
 mergeLines(L,R)
-L.extend(R)
+#L.extend(R)
 for i in range (0,len(L)):
 	print repr(L[i].m) + ' ' +  repr(L[i].b) + ' ' + repr(L[i].vis) + repr(L[i].dom)
 
@@ -233,7 +203,3 @@ alg4(L)
 print '\n'
 for i in range (0,len(L)):
         print  repr(L[i].m) + ' ' +  repr(L[i].b) + ' ' + repr(L[i].vis) + repr(L[i].dom)
-
-#mergeVisibleRecursive(slopesX,interceptsX,visibleX,slopesY,interceptsY,visibleY,1)
-#visibleX.extend(visibleY)
-#print visibleX
