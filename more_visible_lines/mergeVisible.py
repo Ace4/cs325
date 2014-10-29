@@ -25,69 +25,69 @@ def intercept(l1,l2):
 	if y != 0:
 		z = x / y
 	else:
-		z = 'a'
+		z = 'inf'
 	return z
 
 def mergeLeft(L,R):
 	for i in range(0, len(L)):
 		if(len(L) == 1):
-			Lx1 = 'a'
-			Lx2 = 'a'
+			Lx1 = 'inf'
+			Lx2 = 'inf'
 		else:
 			Lx1 = intercept(L[i],L[i-1])
 		if(i == len(L)-1):
-			Lx2 = 'a'	
+			Lx2 = 'inf'	
 		else:
 			Lx2 = intercept(L[i],L[i+1]) 
 		L[i].dom = [Lx1, Lx2]
 		for k in range(0,len(R)):
 			if(len(R) == 1):
-				Rx1 = 'a'
-				Rx2 = 'a'
+				Rx1 = 'inf'
+				Rx2 = 'inf'
 			else:
 				Rx1 = intercept(R[k],R[k-1])
 				
 			if(k == len(R)-1):
-				Rx2 = 'a'
+				Rx2 = 'inf'
 			else:
 				Rx2 = intercept(R[k],R[k+1])
 			R[k].dom = [Rx1,Rx2]
-			if((L[i].dom[0] <= R[k].dom[0] <= L[i].dom[1]) or (L[i].dom[0] <= R[k].dom[1] <= L[i].dom[i]) or  L[i].dom[0] == 'a' or
-			    L[i].dom[1] == 'a' or R[k].dom[0] == 'a' or R[k].dom[1] == 'a' ):
+			if((L[i].dom[0] <= R[k].dom[0] <= L[i].dom[1]) or (L[i].dom[0] <= R[k].dom[1] <= L[i].dom[i]) or  L[i].dom[0] == 'inf' or
+			    L[i].dom[1] == 'inf' or R[k].dom[0] == 'inf' or R[k].dom[1] == 'inf' ):
 				j = i -1
 	                        Yjxjk = L[j].m * (L[j].b - R[k].b) + L[j].b * (R[k].m - L[j].m)
 	                        Yixjk = L[i].m * (L[j].b - R[k].b) + L[i].b * (R[k].m - L[j].m)
  	       	                if(Yjxjk > Yixjk):
         	    		       	for z in range(i,len(L)):
         		                       	L[z].vis = False
-				return
+					return
 
 def mergeRight(L,R):
 	for i in range(len(R)-2,-1,-1):
 	
 		if(len(R) <= 1):
-			Rx1 = 'a'
-			Rx2 = 'a'
+			Rx1 = 'inf'
+			Rx2 = 'inf'
 		else:
 			Rx1 = intercept(R[i],R[i-1])
 		if(i > len(R)-1):
-			Rx2 = 'a'
+			Rx2 = 'inf'
 		else:
 	        	Rx2 = intercept(R[i],R[i+1])
 	        R[i].dom = [Rx1,Rx2]	     
 		for j in range(0,len(L)-1):
 			if(len(L) <= 1):
-				Lx1 = 'a'
-				Lx2 = 'a'
+				Lx1 = 'inf'
+				Lx2 = 'inf'
 			else:
 		        	Lx1 = intercept(L[j],L[j-1])
 	                if(j == len(L)):
-				Lx2 = 'a'
+				Lx2 = 'inf'
 			else:	
 				Lx2 = intercept(L[j],L[j+1])
 	                L[j].dom = [Lx1,Lx2]
-	                if((R[i].dom[0] <= L[j].dom[0] <= R[i].dom[1]) or (R[i].dom[0] <= L[j].dom[1] <= R[i].dom[1]) or L[j].dom[0] == 'a' or
-			    L[j].dom[1] == 'a' or R[i].dom[0] == 'a' or R[i].dom[1] == 'a' ):
+	                if((R[i].dom[0] <= L[j].dom[0] <= R[i].dom[1]) or (R[i].dom[0] <= L[j].dom[1] <= R[i].dom[1]) or L[j].dom[0] == 'inf' or
+			    L[j].dom[1] == 'inf' or R[i].dom[0] == 'inf' or R[i].dom[1] == 'inf' ):
 	                	k = i + 1
 				Yjxjk = L[j].m * (L[j].b - R[k].b) + L[j].b * (R[k].m - L[j].m)
 	                        Yixjk = R[i].m * (L[j].b - R[k].b) + R[i].b * (R[k].m - L[j].m)
@@ -107,26 +107,24 @@ def alg4(Y):
 	n = len(Y)
 	l = int(math.floor(n/2))
 	print "n-l = " + repr(n-l) + " l= " +repr(l) 
-	for i in range(0,l):
+	for i in range(0,n-l):
 		#print "i = " + repr(i)
 		x = Line()	
 		L.append(x)
 		L[i] = Y[i]
-	for i in range(0,n-l):
+	for i in range(0,l):
 		j = i + l 
 		x = Line()
 		R.append(x)
 		R[i] = Y[j]		
 		
-	if(n <= 2):
-		return Y
-	elif(n <= 4):
+	if(n <= 4):
 	 	mergeLines(L,R)
 		return L
 	else: 
-		for i in range(0,l):
+		for i in range(0,n-l):
 			print "L[i] = " + repr(L[i].m)
-		for j in range(0,n-l):
+		for j in range(0,l):
 			print "R[j] = " + repr( R[j].m)
 		mergeLines(alg4(L),alg4(R))
 		L.extend(R)
