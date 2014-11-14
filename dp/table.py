@@ -9,6 +9,7 @@ class DPtable:
 		self.max_value = "-Inf"
 		self.max_index = []
 		self.path = []
+		self.path_length = 0
 
 def print_table(input_table):
 	n = len(input_table[0])
