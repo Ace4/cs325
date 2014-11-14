@@ -1,5 +1,5 @@
-from table import DPtable, DPentry 
-
+from table import DPtable, DPentry, print_table
+from parser import create_table_from_file
 def make_path(input_table,x,y):
 	if(input_table.table[x][y].prev == None):
 		input_table.path.reverse()
@@ -38,6 +38,7 @@ def make_lookup_table(input_table, row, col):
 				new_table.max_value = new_table.table[x][y].value
 				new_table.max_index = [x,y]	
 
+	new_table.path.append(new_table.max_index)	
 	make_path(new_table, new_table.max_index[0], new_table.max_index[1])
 	return new_table
 
@@ -46,7 +47,5 @@ x = [	[-1, 7,-8,10,-5],
 	[ 5,-2,-6,-6, 7],
 	[-7, 4, 7,-3,-3],
 	[ 7, 1,-6, 4,-9]]
-
-y = make_lookup_table(x,0,0)
-print y.max_value
-print y.path
+p = create_table_from_file("example-input-1.txt")
+y = make_lookup_table(p,0,0)
