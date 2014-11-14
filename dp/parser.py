@@ -14,5 +14,5 @@ def create_table_from_file(fn):
 		for y in range(0, cols):
 			cur_row[y] = int(cur_row[y])
 		result.append(cur_row)
-
+	
 	return result
