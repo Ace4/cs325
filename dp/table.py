@@ -1,7 +1,7 @@
 class DPentry:
 	def __init__(self):
-		value = None
-		prev = None
+		self.value = "-Inf"
+		self.prev = "-Inf"
 
 class DPtable:
 	def __init__(self, n):
