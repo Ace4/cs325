@@ -25,4 +25,4 @@ def print_table(input_table):
 def print_path(input_table):
 	n = len(input_table.path)
 	for x in range(0, n):
-			print(input_table.path[x])
+		print repr(input_table.path[x][0]) + ' ' + repr(input_table.path[x][1])
