@@ -16,5 +16,3 @@ def create_table_from_file(fn):
 		result.append(cur_row)
 
 	return result
-
-print(create_table_from_file('example-input-1.txt'))
