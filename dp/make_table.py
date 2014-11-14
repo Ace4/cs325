@@ -1,28 +1,44 @@
 from table import DPtable, DPentry 
 
+def make_path(input_table,x,y):
+	if(input_table.table[x][y].prev == None):
+		input_table.path.reverse()
+		return input_table
+	else:
+		input_table.path.append(input_table.table[x][y].prev)
+		make_path(input_table, input_table.table[x][y].prev[0], input_table.table[x][y].prev[1])
+
 def make_lookup_table(input_table, row, col):
 	table_length = len(input_table) 
 	new_table = DPtable(table_length)
-	new_table.maxvalue = "-inf"
 	for y in range(col,table_length):
 		for x in range(row,table_length):
+
 			if x == row and y == col:
 				new_table.table[x][y].value = input_table[x][y]
 				new_table.table[x][y].prev = None
+
 			elif x == row:
-				new_table.table[x][y].value = input_table[x][y]
-				new_table.table[x][y].prev = [x-1,y]
+				new_table.table[x][y].value = input_table[x][y] + new_table.table[x][y-1].value
+				new_table.table[x][y].prev = [x,y-1]
+
 			elif y == col:
-				new_table.table[x][y].value = input_table[x][y]
-				new_table.table[x][y].prev = [x,y-1]
+				new_table.table[x][y].value = input_table[x][y] + new_table.table[x-1][y].value
+				new_table.table[x][y].prev = [x-1,y] 
+
 			elif input_table[x-1][y] > input_table[x][y-1]:
-				new_table.table[x][y].value  = input_table[x][y] + input_table[x-1][y]
+				new_table.table[x][y].value  = input_table[x][y] + new_table.table[x-1][y].value
 				new_table.table[x][y].prev = [x-1,y]
+
 			else:
-				new_table.table[x][y].value = input_table[x][y] + input_table[x][y-1]
+				new_table.table[x][y].value = input_table[x][y] + new_table.table[x][y-1].value
 				new_table.table[x][y].prev = [x,y-1]
-			if new_table.table[x][y].value > new_table.max_value or new_table.max_value == "-Inf":				
+
+			if (new_table.table[x][y].value > new_table.max_value or new_table.max_value == "-Inf") and (x == table_length-1 or y == table_length-1):				
 				new_table.max_value = new_table.table[x][y].value
+				new_table.max_index = [x,y]	
+
+	make_path(new_table, new_table.max_index[0], new_table.max_index[1])
 	return new_table
 
 x = [	[-1, 7,-8,10,-5],
@@ -32,5 +48,5 @@ x = [	[-1, 7,-8,10,-5],
 	[ 7, 1,-6, 4,-9]]
 
 y = make_lookup_table(x,0,0)
-print y.table[0][0].value
-print x[0][0]
+print y.max_value
+print y.path
