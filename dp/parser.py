@@ -10,6 +10,11 @@ def create_table_from_file(fn):
 	cols = int(f.readline())
 
 	for x in range(0, rows):
-		result.append(f.readline().split())
+		cur_row = f.readline().split()
+		for y in range(0, cols):
+			cur_row[y] = int(cur_row[y])
+		result.append(cur_row)
 
 	return result
+
+print(create_table_from_file('example-input-1.txt'))
