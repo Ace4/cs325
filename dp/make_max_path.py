@@ -1,4 +1,4 @@
-from table import DPtable
+from table import DPtable, print_path
 from make_table import make_lookup_table
 from parser import create_table_from_file
 def find_max_path(input_table):
@@ -16,16 +16,16 @@ test_table1 = create_table_from_file("example-input-1.txt")
 max_table1 = find_max_path(test_table1)
 print max_table1.max_value
 print max_table1.path_length
-print max_table1.path
+print_path(max_table1)
 
 test_table2 = create_table_from_file("example-input-2.txt")
 max_table2 = find_max_path(test_table2)
 print max_table2.max_value
 print max_table2.path_length
-print max_table2.path
+print_path(max_table2)
 
 test_table3 = create_table_from_file("example-input-3.txt")
 max_table3 = find_max_path(test_table3)
 print max_table3.max_value
 print max_table3.path_length
-print max_table3.path
+print_path(max_table3)

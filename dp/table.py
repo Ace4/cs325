@@ -21,3 +21,8 @@ def print_table(input_table):
 		table.append(row)
 		row = []
 	print(table)
+
+def print_path(input_table):
+	n = len(input_table.path)
+	for x in range(0, n):
+			print(input_table.path[x])
