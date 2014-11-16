@@ -1,3 +1,5 @@
+from time import clock
+
 class max_path:
 	def __init__(self):
 		self.path = []
@@ -6,7 +8,7 @@ class max_path:
 	def print_path(self):
 		n = len(self.path)
 		for x in range(0, n):
-			print repr(self.path[x][0]) + ' ' + repr(self.path[x][1])
+			print(repr(self.path[x][0]) + ' ' + repr(self.path[x][1]))
 
 def is_int(f):
 	try:
@@ -37,6 +39,13 @@ def make_table_from_file(fn):
 		result.append(cur_row)
 	
 	return result
+
+def get_timing(filename):
+	A = make_table_from_file(filename)
+	t0 = clock()
+	find_max_path(A)
+	t1 = clock()
+	print(filename + ': ' + repr(t1-t0))
 
 def create_max_path(input_table, j, i):
 	row_length = len(input_table[0])
@@ -87,26 +96,23 @@ def find_max_path(input_table):
 	path = max_path()
 	for i in range(0, N):
 		for j in range(0, N):
-			print("Creating table [" + repr(i) + ', ' + repr(j) + ']')
+			#print("Creating table [" + repr(i) + ', ' + repr(j) + ']')
 			new_path = create_max_path(input_table, i, j)
 			if(is_int(new_path.max_value) and is_int(path.max_value)):
 				if(new_path.max_value > path.max_value):
 					path = new_path
-					print("Found new max")
+					#print("Found new max")
 			elif(path.max_value == "-Inf"):
 				path = new_path
 
 	return path
 
-# x = [[-1, 7,-8,10,-5],
-# 	[-4,-9, 8,-6, 0],
-# 	[ 5,-2,-6,-6, 7],
-# 	[-7, 4, 7,-3,-3],
-# 	[ 7, 1,-6, 4,-9]]
+def print_solution(filename):
+	A = make_table_from_file(filename)
+	path = find_max_path(A)
+	print(path.max_value)
+	print(len(path.path))
+	path.print_path()
 
-t1 = make_table_from_file("test1.txt")
-
-path = find_max_path(t1)
-print(path.max_value)
-print(len(path.path))
-path.print_path()
+# print_solution("example-input-3.txt")
+# get_timing("example-input-3.txt")
