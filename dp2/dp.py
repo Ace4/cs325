@@ -1,4 +1,5 @@
 from time import clock
+from random import randrange
 
 class max_path:
 	def __init__(self):
@@ -25,6 +26,14 @@ def make_blank_table(rows, cols):
 			result[x].append("-Inf")
 	return result
 
+def make_random_table(N, val_range):
+	result = []
+	for x in range(0, N):
+		result.append([])
+		for y in range(0, N):
+			result[x].append(randrange(-val_range, val_range))
+	return result
+
 def make_table_from_file(fn):
 	result = []
 	f = open(fn)
@@ -40,12 +49,16 @@ def make_table_from_file(fn):
 	
 	return result
 
-def get_timing(filename):
-	A = make_table_from_file(filename)
+def get_timing(table):
 	t0 = clock()
-	find_max_path(A)
+	find_max_path(table)
 	t1 = clock()
-	print(filename + ': ' + repr(t1-t0))
+	print(repr(len(table)) + ', ' + repr(t1-t0))
+
+def get_running_times(start, end, step):
+	for N in range(start, end, step):
+		A = make_random_table(N, 100)
+		get_timing(A)
 
 def create_max_path(input_table, j, i):
 	row_length = len(input_table[0])
@@ -114,5 +127,4 @@ def print_solution(filename):
 	print(len(path.path))
 	path.print_path()
 
-# print_solution("example-input-3.txt")
-# get_timing("example-input-3.txt")
+#get_running_times(5, 100, 5)
