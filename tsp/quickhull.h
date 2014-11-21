@@ -6,11 +6,14 @@ class Point {
 		int city_num, x, y;
 	public:
 		Point(); 
+		~Point();
 		Point (int a, int b , int c); 
 		void print(); 
 		int distance(Point A, Point B, Point C);
-		int point_location(Point A, Point B, Point C); 
-
+		int get_x(){return x;}; 
+		int get_y(){return y;}; 
+		int get_city_num() {return city_num;};
+		bool operator==(Point B);
 };
 
 Point::Point (){
@@ -19,10 +22,23 @@ Point::Point (){
 	y = 0;
 }
 
+Point::~Point (){
+	city_num = 0;	
+	x = 0;
+	y = 0; 
+}
+
 Point::Point (int city_in, int x_in, int y_in){
         city_num = city_in;
         x = x_in;
         y = y_in;
+}
+
+bool Point::operator==(Point B){
+	if(city_num == B.get_city_num() && x == B.get_x() && y == B.get_y())
+		return true;
+	return false; 
+
 }
 
 void Point::print(){
@@ -39,11 +55,4 @@ int Point::distance(Point A, Point B, Point C){
 	if (num < 0)	
 		num = -num;
 	return num; 
-}
-
-int Point::point_location(Point A, Point B, Point P){
-	int cp1 = (B.x - A.x)*(P.y-A.y) - (B.y-A.y)*(P.x-A.x);
-	if(cp1>0)
-		return 1;
-	return -1;
 }
