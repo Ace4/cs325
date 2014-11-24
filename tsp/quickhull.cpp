@@ -1,5 +1,4 @@
 #include "point.h"
-#include "drawline.h"
 #include <limits.h>
 #include <vector> 
 #include <algorithm>
@@ -22,7 +21,7 @@ int distance(Point A, Point B, Point C){
 }
 
 
-void hullSet(Point A, Point B, vector<Point> set, vector<Point>& hull){
+void hull_set(Point A, Point B, vector<Point> set, vector<Point>& hull){
 	int insert_position =  find(hull.begin(), hull.end(), B) -  hull.begin();
 	if (set.size() == 0)
 		return;
@@ -62,8 +61,8 @@ void hullSet(Point A, Point B, vector<Point> set, vector<Point>& hull){
 		}
 	}
 	
-	hullSet(A,P,leftSetAP,hull);
-	hullSet(P,B,leftSetPB,hull);
+	hull_set(A,P,leftSetAP,hull);
+	hull_set(P,B,leftSetPB,hull);
 
 }
 
@@ -105,8 +104,8 @@ vector<Point>  quickHull(vector<Point> points_in){
 		else 
 			right_set.push_back(p); 
 	}
-	hullSet(A,B,right_set,convexHull);
-	hullSet(B,A,left_set,convexHull); 
+	hull_set(A,B,right_set,convexHull);
+	hull_set(B,A,left_set,convexHull); 
 
 	return convexHull;
 }
@@ -134,6 +133,5 @@ int main(){
 	for(int i = 0; i< the_hull.size(); i++)
 		the_hull[i].print();
 	return 0; 
-	draw_line(a,b);  
 
 } 
