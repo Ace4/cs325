@@ -1,10 +1,11 @@
-#include "quickhull.h"
+#include "point.h"
+#include "drawline.h"
 #include <limits.h>
 #include <vector> 
 #include <algorithm>
 
 int point_location(Point A, Point B, Point P){
-        int cp1 = (B.get_x() - A.get_x())*(P.get_y()-A.get_y()) - (B.get_y()-A.get_y())*(P.get_x()-A.get_x());
+        int cp1 = (B.x() - A.x())*(P.y()-A.y()) - (B.y()-A.y())*(P.x()-A.x());
         if(cp1>0)
                 return 1;
         return -1;
@@ -12,9 +13,9 @@ int point_location(Point A, Point B, Point P){
 
 
 int distance(Point A, Point B, Point C){
-        int ABx = B.get_x() - A.get_x();
-        int ABy = B.get_y() - A.get_y();
-        int num = ABx * (A.get_y() - C.get_y()) - ABy * (A.get_x() - C.get_x());
+        int ABx = B.x() - A.x();
+        int ABy = B.y() - A.y();
+        int num = ABx * (A.y() - C.y()) - ABy * (A.x() - C.x());
         if (num < 0)
                 num = -num;
         return num;
@@ -75,13 +76,13 @@ vector<Point>  quickHull(vector<Point> points_in){
 	int minX = INT_MAX; 
 	int maxX = INT_MIN; 
 	for (int i = 0; i < points_in.size(); i++){
-		if(points_in[i].get_x() < minX){
-			minX = points_in[i].get_x();
+		if(points_in[i].x() < minX){
+			minX = points_in[i].x();
 			minPoint = i;
 		}
 	
-		if(points_in[i].get_x() > maxX){
-			maxX = points_in[i].get_x();
+		if(points_in[i].x() > maxX){
+			maxX = points_in[i].x();
 			maxPoint = i;
 		}
 	}
@@ -114,7 +115,7 @@ int main(){
 	Point  data_set[100];
 	Point a (1,0,0); 
 	Point b (2,0,200);
-	Point c (3,300,200); 
+	Point c (3,-4,-30); 
 	Point d (4,55,100);
 	Point e (5,32,71);	
 	Point f (6,54,100);
@@ -128,12 +129,11 @@ int main(){
 	tsp.push_back(d);
 	tsp.push_back(e);
 	tsp.push_back(f);
-//	a.print();	
-//	b.print();
-//	c.print(); 
 	vector<Point> the_hull = quickHull(tsp); 
 	
 	for(int i = 0; i< the_hull.size(); i++)
 		the_hull[i].print();
 	return 0; 
+	draw_line(a,b);  
+
 } 

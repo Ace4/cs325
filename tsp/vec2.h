@@ -14,10 +14,13 @@ class Vec2
     public:
         Vec2( float=0, float=0);
         Vec2&   operator=( const Vec2& );
-        Vec2    operator+( const Vec2& );
+        bool	operator==( const Vec2& ); 
+	Vec2    operator+( const Vec2& );
         Vec2    operator-( const Vec2& );       // binary -
         Vec2    operator-( );                   // unary -
-        float    Cross( Vec2& );
+	float	x() {return v0;};
+	float 	y() {return v1;};
+	float   Cross( Vec2& );
         float   Dot( Vec2& );
         float   Length( );
         void    Print( char * = "", FILE * = stderr );

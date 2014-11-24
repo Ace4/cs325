@@ -13,6 +13,12 @@ Vec2& Vec2::operator=( const Vec2& rhs )
 	return *this;
 }
 
+bool Vec2::operator==( const Vec2& rhs)
+{
+	if(this->v0 == rhs.v0 && this->v1 == rhs.v1)
+		return true;
+	return false;
+}
 Vec2 Vec2::operator+( const Vec2& that )
 {
 	Vec2 result;
