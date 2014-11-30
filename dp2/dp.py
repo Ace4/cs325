@@ -1,6 +1,6 @@
 from time import clock
 from random import randrange
-
+from numpy import *
 class max_path:
 	def __init__(self):
 		self.path = []
@@ -127,4 +127,4 @@ def print_solution(filename):
 	print(len(path.path))
 	path.print_path()
 
-#get_running_times(5, 100, 5)
+print_solution("test3.txt")
