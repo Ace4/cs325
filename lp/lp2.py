@@ -45,10 +45,11 @@ prob += lpSum([a*x[i] + b*y[i] - c for i in range(len(z))]), "MinimizeObjective"
 
 # Add maximum absolute value constraints
 for i in range(len(z)):
+	prob += a  != 0  or b  != 0  or c != 0 
 	j = z[i]
 	prob += Points[j] >= a*x[i] + b*y[i] - c, "PositiveAbsoluteRequiement_%s" % Points[j]
 	prob += Points[j] >= -a*x[i] - b*y[i] + c, "NegativeAbsoluteRequiement_%s" % Points[j]
-
+	
 # The problem data is written to an .lp file
 prob.writeLP("notleastsquares.lp")
 
