@@ -43,10 +43,25 @@ Vec2 Vec2::operator-( )
 	return result;
 }
 
+Vec2 Vec2::operator*(const Vec2& that)
+{
+	Vec2 result;
+	result.v0 = this->v0 * that.v0;
+	result.v1 = this->v1 * that.v1;
+	return result;
+}
 float Vec2::Cross( Vec2& that )
 {
 	return (this->v0 * that.v1) - (this->v1 * that.v0);	
 }
+
+Vec2 Vec2::Shoot(const Vec2& that, float t){
+	Vec2 result;
+	result.v0 = this->v0 + t *(that.v0 - this->v0);
+	result.v1 = this->v1 + t *(that.v1 - this->v1); 	
+	return result; 
+}
+
 
 float Vec2::Dot( Vec2& that )
 {
@@ -73,3 +88,4 @@ Vec2 Vec2::Unit( )
 	result.v1 = this->v1 / len;
 	return result;
 }
+

@@ -1,6 +1,6 @@
 #include "point.h"
 Point::Point (){
-	city = 0;
+	city = -1;
 	pts = Vec2(0,0);
 }
 
@@ -14,11 +14,15 @@ bool Point::operator==(Point B){
 	if(city == B.city_num() && pts == B.point())
 		return true;
 	return false; 
+}
+
+void Point::Print(char *str, FILE *fp){
+	fprintf(fp, "%s City Number: %d \n X: %f\n Y: %f\n", str, city, pts.x() , pts.y());
 
 }
 
-void Point::print(){
-	cout <<"City Number: " << city <<endl << "X: " << pts.x() <<endl << "Y: " << pts.y() <<endl; 
-
+float Point::Dot(Vec2 that){
+	float result; 
+	result =  this->point().Dot(that); 
+	return result; 
 }
-

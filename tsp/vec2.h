@@ -18,11 +18,14 @@ class Vec2
 	Vec2    operator+( const Vec2& );
         Vec2    operator-( const Vec2& );       // binary -
         Vec2    operator-( );                   // unary -
+	Vec2	operator*( const Vec2& );
 	float	x() {return v0;};
 	float 	y() {return v1;};
 	float   Cross( Vec2& );
         float   Dot( Vec2& );
-        float   Length( );
+      	Vec2	Shoot(const Vec2&, float t);
+	void	CreateLine(const Vec2&, const Vec2&);
+	float   Length( );
         void    Print( char * = "", FILE * = stderr );
         Vec2    Unit( );
 

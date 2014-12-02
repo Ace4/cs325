@@ -3,7 +3,6 @@
 #include <vector> 
 #include <algorithm>
 #include <stdio.h>
-//part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
 int point_location(Point A, Point B, Point P){
         int cp1 = (B.x() - A.x())*(P.y()-A.y()) - (B.y()-A.y())*(P.x()-A.x());
         if(cp1 > 0)
@@ -12,7 +11,7 @@ int point_location(Point A, Point B, Point P){
 		 return -1;
 }
 
-//part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
+
 int distance(Point A, Point B, Point C){
         int ABx = B.x() - A.x();
         int ABy = B.y() - A.y();
@@ -22,7 +21,7 @@ int distance(Point A, Point B, Point C){
         return num;
 }
 
-//part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
+
 void hull_set(Point A, Point B, vector<Point> &set, vector<Point> &hull){
 	int insert_position =  find(hull.begin(), hull.end(), B) -  hull.begin();
 	if (set.size() == 0)
@@ -68,7 +67,6 @@ void hull_set(Point A, Point B, vector<Point> &set, vector<Point> &hull){
 
 }
 
-//qucikHull algorithm based on algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html java implimentation
 vector<Point>  quickHull(vector<Point> &points_in){
 	vector<Point> convexHull(0);
 	if(points_in.size() < 3){			//if our set is 3 point our hull is this set
@@ -124,6 +122,17 @@ vector<Point>  quickHull(vector<Point> &points_in){
 	return convexHull;
 }
 
+Line createLine(Point a, Point b){
+	Line AB( a.point(), a.point() - b.point());
+	return AB; 
+}
+Vec2 perp(Vec2 a, Vec2 b){
+	Vec2 result;
+	b = b.Unit();
+	Vec2 adotb = a.Dot(b);
+	result = a - adotb * b;
+	return result;
+}
 //**in**
 //Point A the starting point of the line
 //Point B the ending point of the line
@@ -162,7 +171,6 @@ double point_to_line(Vec2 A, Vec2 B, Point point)
     return sqrt(diffX * diffX + diffY * diffY);
 }
 
-//returns the line that
 vector<Line> min_distance(vector<Line> &hull_lines, vector<Point> &points){
 	vector<float> min_dist(points.size(), INT_MAX);
 	vector<Line> min_lines(points.size()); 
@@ -191,24 +199,17 @@ vector<Line> draw_lines(vector<Point> &hull_points, vector<Point>  &inside_point
 return hull_lines;
 }
 
-void redraw_line(Line line_in, Point p){
-//draw a line from the start of line_in to point p
-//and then draw a line from point p to the end of line_in
-	Line start_to_P(line_in.points(), p.point());
-	Line p_to_end(p.point(),line_in.vectors()); 
-	start_to_P.Print();
-	p_to_end.Print();
-}
 int main(){
 	Point  data_set[8] = Point();
- 	data_set[0] = Point(1,5,5); 
-	data_set[1] = Point (2,-5,5);
-	data_set[2] = Point(3,-5,-5);
-	data_set[3] = Point(4,5,-5);  
-	data_set[4] = Point(9,3,1);
-	data_set[5] = Point(10,3,-1);
-	data_set[6] = Point(11,-3,1);
-	data_set[7] = Point(12,-3,-1);
+ 	data_set[0] = Point(1,5,0); 
+	data_set[1] = Point (2,0,5);
+	data_set[2] = Point(3,-5,0);
+	data_set[3] = Point(4,0,-5);  
+	data_set[4] = Point(5,2,2);
+	data_set[5] = Point(6,2,-2);
+	data_set[6] = Point(7,-2, -2); 
+	data_set[7] = Point(8,-2,-2); 
+
 /*	Line AB(data_set[0].point(),data_set[1].point());
 	Line BC(data_set[1].point(),data_set[2].point()); 
 	Line CD(data_set[2].point(),data_set[3].point());	
@@ -235,11 +236,6 @@ int main(){
         for( int i =0; i < min_dist.size(); i++){\
 		tsp[i].Print();		        
 		min_dist[i].Print("closest line");
-		float x = tsp[i].x() - min_dist[i].vectors().x();	//= tsp[i].Dot(min_dist[i].vectors()); 
-		float y = tsp[i].y() - min_dist[i].vectors().y();
-		float d = sqrt( x * x + y * y); 
-		cout << "\t Distance "<< d <<endl;
-		//redraw_line(min_dist[i], tsp[i]); 
 	}	
 
 
