@@ -9,5 +9,5 @@ x = 1:10;
 y = 1.7142857*x + 1.8571429;
 
 figure(1); plot(x, y, 'b'); hold off;
-legend('Data Points','Solution');
+legend('Data Points','Data Line', 'Solution');
 print -dpng 'plot.png';
