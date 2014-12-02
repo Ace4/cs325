@@ -8,14 +8,10 @@ for me optimization problem.
 # Import PuLP modeler functions
 from pulp import *
 
-a = LpVariable('a',None,None,LpInteger)
-b = LpVariable('b',None,None,LpInteger)
-c = LpVariable('c',None,None,LpInteger)
-z = LpVariable('z',None,None,LpInteger)
+a = LpVariable('a')
+c = LpVariable('c')
+z = LpVariable('z')
 points = ['p1','p2','p3','p4','p5','p6','p7']
-
-# x = [1,2,3,5,7,8,10]
-# y = [3,5,7,11,14,15,19]
 
 x = {
 	 'p1': 1,
@@ -46,11 +42,8 @@ prob += z, "MinimizeObjective"
 
 # Add maximum absolute value constraints
 for i in points:
-	prob += z >= a*x[i] + b*y[i] - c, "PositiveAbsoluteRequiement_%s" % Points[i]
-	prob += z >= -a*x[i] - b*y[i] + c, "NegativeAbsoluteRequiement_%s" % Points[i]
-	
-prob += b >= 1, "derpRequirement1"
-prob += b <= -1, "derpRequirement2"
+	prob += z + (y[i] - a*x[i] - c) >= 0, "PositiveAbsoluteRequiement_%s" % Points[i]
+	prob += z - (y[i] - a*x[i] - c) >= 0, "NegativeAbsoluteRequiement_%s" % Points[i]
 
 # The problem data is written to an .lp file
 prob.writeLP("notleastsquares.lp")
