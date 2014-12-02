@@ -1,6 +1,5 @@
 from time import clock
 from random import randrange
-from multiprocessing import Pool
 
 class max_path:
 	def __init__(self):
@@ -73,7 +72,6 @@ def create_max_path(input_table, j, i):
 	#Build the value table
 	for y in range(0, cols):
 		for x in range(0, rows):
-		#	print(x, y)
 			if ((x == 0) and (y == 0)):
 				value_table[x][y] = input_table[i+x][j+y]
 				path_table[x][y] = None
@@ -108,23 +106,17 @@ def create_max_path(input_table, j, i):
 
 def find_max_path(input_table):
 	N = len(input_table)
-	pool = Pool(4)
 	path = max_path()
-#	for i in range(0, N):
-#		for j in range(0, N):
+	for i in range(0, N):
+		for j in range(0, N):
 			#print("Creating table [" + repr(i) + ', ' + repr(j) + ']')
-	new_path = [pool.apply(create_max_path, args=(input_table, i,j,)) for i in range(0,N) for j in range(0,N)]
-
-	for i in range(0, len(new_path)):
-#		print new_path[i].max_value
-
-#		if(is_int(new_path[i].max_value) and is_int(path.max_value)):
-		if(new_path[i].max_value > path.max_value):
-			path = new_path[i]
-			print("Found new max")
-		elif(path.max_value == "-Inf"):
-			path = new_path[i]
-			#print("change max")
+			new_path = create_max_path(input_table, i, j)
+			if(is_int(new_path.max_value) and is_int(path.max_value)):
+				if(new_path.max_value > path.max_value):
+					path = new_path
+					#print("Found new max")
+			elif(path.max_value == "-Inf"):
+				path = new_path
 
 	return path
 
@@ -135,4 +127,4 @@ def print_solution(filename):
 	print(len(path.path))
 	path.print_path()
 
-print_solution("test3.txt") 
+#get_running_times(5, 100, 5)
