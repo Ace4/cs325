@@ -3,8 +3,8 @@
 #define _USE_MATH_DEFINES
 #include <cmath>
 
-#ifndef VEC3_H
-#define VEC3_H
+#ifndef VEC2_H
+#define VEC2_H
 
 class Vec2
 {
@@ -29,7 +29,6 @@ class Vec2
         void    Print( char * = "", FILE * = stderr );
         Vec2    Unit( );
 
-	friend class Mat4;
 };
 
 inline float 

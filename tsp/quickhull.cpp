@@ -4,7 +4,7 @@
 #include <algorithm>
 #include <stdio.h>
 //part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
-int point_location(Point A, Point B, Point P){
+int point_location(City A, City B, City P){
         int cp1 = (B.x() - A.x())*(P.y()-A.y()) - (B.y()-A.y())*(P.x()-A.x());
         if(cp1 > 0)
                 return 1;
@@ -13,7 +13,7 @@ int point_location(Point A, Point B, Point P){
 }
 
 //part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
-int distance(Point A, Point B, Point C){
+int distance(City A, City B, City C){
         int ABx = B.x() - A.x();
         int ABy = B.y() - A.y();
         int num = ABx * (A.y() - C.y()) - ABy * (A.x() - C.x());
@@ -23,41 +23,41 @@ int distance(Point A, Point B, Point C){
 }
 
 //part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
-void hull_set(Point A, Point B, vector<Point> &set, vector<Point> &hull){
+void hull_set(City A, City B, vector<City> &set, vector<City> &hull){
 	int insert_position =  find(hull.begin(), hull.end(), B) -  hull.begin();
 	if (set.size() == 0)
 		return;
 	if (set.size() == 1){
-		Point p = set[0];
+		City p = set[0];
 		set.erase(set.begin());
 		hull.insert(hull.begin() + insert_position,p); 
 		return;
 	}
 	int dist = INT_MIN;
-	int furthestPoint = -1;
+	int furthestCity = -1;
 	for (int i = 0; i <set.size(); i++){
-		Point p = set[i];
+		City p = set[i];
 		int distance1 = distance(A,B,p);
 		if (distance1 > dist){
 			dist = distance1;
-			furthestPoint = i;
+			furthestCity = i;
 		}
 	}
-	Point P = set[furthestPoint];
-	set.erase(set.begin() + furthestPoint); 
+	City P = set[furthestCity];
+	set.erase(set.begin() + furthestCity); 
 	hull.insert(hull.begin()+insert_position,P);
 
-	vector<Point> leftSetAP(0); 
+	vector<City> leftSetAP(0); 
 	for (int i = 0; i< set.size(); i++){
-		Point M = set[i];
+		City M = set[i];
 		if(point_location(A,P,M)==1){
 			leftSetAP.push_back(M);
 		}
 	}
 
-	vector<Point> leftSetPB(0);
+	vector<City> leftSetPB(0);
 	for (int i = 0; i< set.size(); i++){
-		Point M = set[i];	
+		City M = set[i];	
 		if(point_location(P,B,M)==1){
 			leftSetPB.push_back(M);
 		}
@@ -69,42 +69,42 @@ void hull_set(Point A, Point B, vector<Point> &set, vector<Point> &hull){
 }
 
 //qucikHull algorithm based on algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html java implimentation
-vector<Point>  quickHull(vector<Point> &points_in){
-	vector<Point> convexHull(0);
+vector<City>  quickHull(vector<City> &points_in){
+	vector<City> convexHull(0);
 	if(points_in.size() < 3){			//if our set is 3 point our hull is this set
-		Point A = points_in[0]; 		//Add the first point to the end so that we connect
+		City A = points_in[0]; 		//Add the first point to the end so that we connect
 		points_in.push_back(A);
 		return points_in; 
 	}
-	int minPoint = -1;
-	int maxPoint = -1; 
+	int minCity = -1;
+	int maxCity = -1; 
 	int minX = INT_MAX; 
 	int maxX = INT_MIN; 
 	for (int i = 0; i < points_in.size(); i++){
 		if(points_in[i].x() < minX){
 			minX = points_in[i].x();
-			minPoint = i;
+			minCity = i;
 		}
 	
 		if(points_in[i].x() > maxX){
 			maxX = points_in[i].x();
-			maxPoint = i;
+			maxCity = i;
 		}
 	}
 
-	Point A = points_in[minPoint];
-	Point B = points_in[maxPoint]; 
+	City A = points_in[minCity];
+	City B = points_in[maxCity]; 
 	convexHull.push_back(A);
 	convexHull.push_back(B); 
 	int x =	convexHull.size();
-	points_in.erase( points_in.begin() + minPoint);
-	points_in.erase(points_in.begin() + maxPoint); 
+	points_in.erase(points_in.begin() + minCity);
+	points_in.erase(points_in.begin() + maxCity); 
 	
-	vector<Point> left_set(0);
-	vector<Point> right_set(0);
+	vector<City> left_set(0);
+	vector<City> right_set(0);
 
 	for (int i = 0; i < points_in.size(); i++) {
-		Point p = points_in[i]; 
+		City p = points_in[i]; 
 		if (point_location(A,B,p) == -1)
 			left_set.push_back(p); 
 		else 
@@ -125,12 +125,12 @@ vector<Point>  quickHull(vector<Point> &points_in){
 }
 
 //**in**
-//Point A the starting point of the line
-//Point B the ending point of the line
-//Point point the point to find the distance to
+//City A the starting point of the line
+//City B the ending point of the line
+//City point the point to find the distance to
 //**out**
 //the distance from this line to the point
-double point_to_line(Vec2 A, Vec2 B, Point point)
+double point_to_line(Vec2 A, Vec2 B, City point)
 {
 	float diffX = B.x() - A.x();
 	float diffY = B.y() - A.y();
@@ -163,22 +163,28 @@ double point_to_line(Vec2 A, Vec2 B, Point point)
 }
 
 //returns the line that
-vector<Line> min_distance(vector<Line> &hull_lines, vector<Point> &points){
+vector< pair<Line, vector<City> > > determine_closest_lines(vector<Line> &hull_lines, vector<City> &points){
 	vector<float> min_dist(points.size(), INT_MAX);
 	vector<Line> min_lines(points.size()); 
+	vector< pair<Line, vector<City> > > line_city_pair; 
 	for(int i = 0; i < hull_lines.size(); i++){
-
+		pair<Line, vector<City> > temp; 
+		temp.first = hull_lines[i]; 
+		line_city_pair.push_back(temp); 
+	} 
+	for(int i = 0; i < hull_lines.size(); i++){
 		for(int j = 0; j < points.size(); j++){
 			double dist = hull_lines[i].ltp(points[j]);
 			if(dist < min_dist[j]){
-				min_lines[j] = hull_lines[i]; 
-				min_dist[j] = dist; 
+				line_city_pair[i].second.push_back(points[j]); 		
+				//min_lines[j] = hull_lines[i]; 
+				//min_dist[j] = dist; 
 			}
 		}
 	}
-return min_lines; 
+return line_city_pair; 
 }
-vector<Line> draw_lines(vector<Point> &hull_points, vector<Point>  &inside_points){
+vector<Line> draw_lines(vector<City> &hull_points, vector<City>  &inside_points){
 	vector<Line> hull_lines;
 	for(int i = 0; i < hull_points.size(); i++){
 		if(i == hull_points.size()-1)
@@ -191,7 +197,7 @@ vector<Line> draw_lines(vector<Point> &hull_points, vector<Point>  &inside_point
 return hull_lines;
 }
 
-void redraw_line(Line line_in, Point p){
+void redraw_line(Line line_in, City p){
 //draw a line from the start of line_in to point p
 //and then draw a line from point p to the end of line_in
 	Line start_to_P(line_in.points(), p.point());
@@ -200,15 +206,15 @@ void redraw_line(Line line_in, Point p){
 	p_to_end.Print();
 }
 int main(){
-	Point  data_set[8] = Point();
- 	data_set[0] = Point(1,5,5); 
-	data_set[1] = Point (2,-5,5);
-	data_set[2] = Point(3,-5,-5);
-	data_set[3] = Point(4,5,-5);  
-	data_set[4] = Point(9,3,1);
-	data_set[5] = Point(10,3,-1);
-	data_set[6] = Point(11,-3,1);
-	data_set[7] = Point(12,-3,-1);
+	City  data_set[8] = City();
+ 	data_set[0] = City(1,5,5); 
+	data_set[1] = City (2,-5,5);
+	data_set[2] = City(3,-5,-5);
+	data_set[3] = City(4,5,-5);  
+	data_set[4] = City(9,3,1);
+	data_set[5] = City(10,3,-1);
+	data_set[6] = City(11,-3,1);
+	data_set[7] = City(12,-3,-1);
 /*	Line AB(data_set[0].point(),data_set[1].point());
 	Line BC(data_set[1].point(),data_set[2].point()); 
 	Line CD(data_set[2].point(),data_set[3].point());	
@@ -224,42 +230,34 @@ int main(){
 	cout <<"cde: "  << cd <<endl;
 	cout <<"dae: "  << da <<endl;
 */
-	vector<Point> tsp; 
+	vector<City> tsp; 
 	int i = 0;
 	for (int i = 0; i < 8; i++){
 		tsp.push_back(data_set[i]);
 	}
-	vector<Point> hull_points = quickHull(tsp); 
+	vector<City> hull_points = quickHull(tsp); 
 	vector<Line> hull_lines = draw_lines(hull_points, tsp);	
-	vector<Line> min_dist = min_distance(hull_lines, tsp);
-        for( int i =0; i < min_dist.size(); i++){\
+	vector< pair<Line, vector<City> > > closest_lines = determine_closest_lines(hull_lines, tsp);
+        for( int i =0; i < closest_lines.size(); i++){
 		tsp[i].Print();		        
-		min_dist[i].Print("closest line");
-		float x = tsp[i].x() - min_dist[i].vectors().x();	//= tsp[i].Dot(min_dist[i].vectors()); 
-		float y = tsp[i].y() - min_dist[i].vectors().y();
+		closest_lines[i].first.Print("closest line");
+		float x = tsp[i].x() - closest_lines[i].first.vectors().x();	//= tsp[i].Dot(min_dist[i].vectors()); 
+		float y = tsp[i].y() - closest_lines[i].first.vectors().y();
 		float d = sqrt( x * x + y * y); 
-		cout << "\t Distance "<< d <<endl;
+		cout << "\tDistance "<< d <<endl<<endl;
 		//redraw_line(min_dist[i], tsp[i]); 
 	}	
 
-
-/*	for(int i = 0; i < hull_points.size(); i++){
-		if(i == hull_points.size()-1)
-			hull_lines.push_back(Line(hull_points[i].point(),hull_points[0].point()));
-		else
-			hull_lines.push_back(Line(hull_points[i].point(),hull_points[i+1].point())); 
-		for(int j = 0; j < tsp.size(); j++){
-			double dist = hull_lines[i].ltp(tsp[j]);
-			if(dist < min_dist[j]){
-				min_dist[j] = dist;
-			}
-		}
-		hull_lines[i].Print();
-	}
-
-	for( int i =0; i < min_dist.size(); i++)
-		cout << min_dist[i] <<endl;
-*/
+//	closest_lines[0].second[1].Print("waaat"); 
+	
+//	array tuples(line array citys)
+//	Hull_Line[0][0], Hull_line[0][1] city
+//	vector< pair<Line,vector<City> > > closest_line_pair;
+//	pair<Line,vector<City> > temp;
+//	temp.first = hull_lines[0]; 
+//	temp.second.push_back( tsp[0]); 
+//	closest_line_pair.push_back(temp); 
+//	closest_line_pair[0].first.Print();
 
 return 0;
-}  
+} 

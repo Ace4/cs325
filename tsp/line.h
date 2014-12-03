@@ -1,4 +1,4 @@
-#include "point.h"
+#include "city.h"
 
 class Line {
 		Vec2 pts;
@@ -11,5 +11,5 @@ class Line {
 		bool operator==(Line&);
 		void Print(char *str = "", FILE *fp = stderr);
 		Line Dot(Vec2& that ); 
-		double ltp(Point point); 
+		double ltp(City point); 
 };

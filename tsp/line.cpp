@@ -17,7 +17,7 @@ bool Line::operator==(Line &line_in){
 
 void Line::Print(char *str, FILE *fp){
 	fprintf(fp, "\t%s x: %f + (%f)*t \n",str,  pts.x(), vecs.x());
-	fprintf(fp, "\t%s y: %f + (%f)*t \n\n",str,	pts.y(), vecs.y());
+	fprintf(fp, "\t%s y: %f + (%f)*t \n",str,	pts.y(), vecs.y());
 
 }
 
@@ -31,7 +31,7 @@ Line Line::Dot(Vec2& that){
 // a  point
 //*** out *** 
 // minimum distance from that point to this line 
-double Line::ltp(Point point){
+double Line::ltp(City point){
         float diffX = vecs.x() - pts.x();
         float diffY = vecs.y() - pts.y();
         if ((diffX == 0) && (diffY == 0)){
