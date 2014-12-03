@@ -1,4 +1,4 @@
-#include "line.h"
+#include "qs.h"
 #include <limits.h>
 #include <vector> 
 #include <algorithm>
@@ -115,11 +115,11 @@ vector<City>  quickHull(vector<City> &points_in){
 
 	points_in.clear();
 	for(int i =0; i < right_set.size(); i++){
-		right_set[i].Print("right set"); 
+//		right_set[i].Print("right set"); 
      		points_in.push_back(right_set[i]); 
 	}
         for(int i =0; i < left_set.size(); i++){
-		left_set[i].Print("left set"); 
+//		left_set[i].Print("left set"); 
 		points_in.push_back(left_set[i]); 
 	}
 
@@ -182,7 +182,6 @@ vector< pair<Line, vector<City> > > determine_closest_lines(vector<Line> &hull_l
 				//line_city_pair[i].second.push_back(points[j]); 		
 				min_lines[j] = i; 
 				min_dist[j] = dist; 
-				cout << dist <<endl;
 			}
 		}
 	}
@@ -203,7 +202,7 @@ vector<Line> draw_lines(vector<City> &hull_points, vector<City>  &inside_points)
                 else
                         hull_lines.push_back(Line(hull_points[i].point(),hull_points[i+1].point()));
                
-                hull_lines[i].Print("hull lines ");
+//                hull_lines[i].Print("hull lines ");
         }
 return hull_lines;
 }
@@ -213,8 +212,8 @@ void redraw_line(Line line_in, City p){
 //and then draw a line from point p to the end of line_in
 	Line start_to_P(line_in.points(), p.point());
 	Line p_to_end(p.point(),line_in.vectors()); 
-	start_to_P.Print();
-	p_to_end.Print();
+//	start_to_P.Print();
+//	p_to_end.Print();
 }
 int main(){
 	City  data_set[8] = City();
@@ -222,10 +221,10 @@ int main(){
 	data_set[1] = City (2,-5,5);
 	data_set[2] = City(3,-5,-5);
 	data_set[3] = City(4,5,-5);  
-	data_set[4] = City(9,3,1);
-	data_set[5] = City(10,3,-1);
-	data_set[6] = City(11,-3,1);
-	data_set[7] = City(12,-3,-1);
+	data_set[4] = City(5,3,1);
+	data_set[5] = City(6,3,-1);
+	data_set[6] = City(7,-3,1);
+	data_set[7] = City(8,-3,-1);
 /*	Line AB(data_set[0].point(),data_set[1].point());
 	Line BC(data_set[1].point(),data_set[2].point()); 
 	Line CD(data_set[2].point(),data_set[3].point());	
@@ -250,22 +249,55 @@ int main(){
 	vector<Line> hull_lines = draw_lines(hull_points, tsp);	
 	vector< pair<Line, vector<City> > > closest_lines = determine_closest_lines(hull_lines, tsp);
 
-	for(int i = 0; i < tsp.size(); i++)
-		tsp[i].Print();
-        for( int i =0; i < closest_lines.size(); i++){
-	//	tsp[i].Print();	
-		closest_lines[i].first.Print("cities closest to this line");
-		for( int j = 0; j < closest_lines[i].second.size();j++)	
-			closest_lines[i].second[j].Print("city");
-	//	float x = tsp[i].x() - closest_lines[i].first.vectors().x();	//= tsp[i].Dot(min_dist[i].vectors()); 
-		float y = tsp[i].y() - closest_lines[i].first.vectors().y();
-		float d = sqrt( x * x + y * y); 
-		cout << "Distance "<< d <<endl<<endl;
+//	for(int i = 0; i < tsp.size(); i++)
+//		tsp[i].Print();
+//      for( int i =0; i < closest_lines.size(); i++){
+//		closest_lines[i].first.Print("cities closest to this line");
+//		for( int j = 0; j < closest_lines[i].second.size();j++)	
+//			closest_lines[i].second[j].Print("city");
 		//redraw_line(min_dist[i], tsp[i]); 
-	}	
+//	}	
 
-//	closest_lines[0].second[1].Print("waaat"); 
-	
+	//A.Dot(B.Unit());
+	for(int i =0; i < closest_lines.size(); i++){
+		int *lengths = new int[closest_lines[i].second.size()];
+		 for(int j=0; j<closest_lines[i].second.size();j++){
+                        Vec2 temp = closest_lines[i].first.points().Unit(); 
+			lengths[j] = closest_lines[i].second[j].point().Dot(temp);
+		 }
+		quickCitySort(closest_lines[i].second, lengths, 0, closest_lines[i].second.size()-1); 
+
+	}
+
+
+
+// I am trying to compute the total length of the solution here. 
+//
+	float tot_len = 0; 
+	for(int i = 0; i < closest_lines.size();i++){
+		int index; 
+		Vec2 temp;
+		if(closest_lines[i].second.size() > 0){
+			index = closest_lines[i].second.size() -1; 
+			temp = closest_lines[i].second[index].point() - hull_points[i].point();		
+		}
+		else 
+			temp = hull_points[i+1].point() - hull_points[i].point();
+		tot_len += temp.Length();
+		hull_points[i].Print(); 
+		
+		for(int j=closest_lines[i].second.size()-1; j>=0; --j){
+			if(j > 0){
+				temp =  closest_lines[i].second[j].point() - closest_lines[i].second[j-1].point(); 
+			}
+			else 
+				temp =  closest_lines[i].second[j].point() - hull_points[i+1].point();
+			tot_len += temp.Length();
+			closest_lines[i].second[j].Print(); 
+		}
+	}
+	cout << "total path length is: " << tot_len <<" units of space" <<endl; 
+//	closest_lines[0].second[1].Print("waaat"); 	
 //	array tuples(line array citys)
 //	Hull_Line[0][0], Hull_line[0][1] city
 //	vector< pair<Line,vector<City> > > closest_line_pair;

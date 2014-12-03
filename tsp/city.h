@@ -1,6 +1,7 @@
 #include <iostream>
 #include <stdio.h>
 #include <string.h>
+#include <vector>
 #include "vec2.h"
 using namespace std;
 
