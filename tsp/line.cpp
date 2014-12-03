@@ -16,8 +16,8 @@ bool Line::operator==(Line &line_in){
 }
 
 void Line::Print(char *str, FILE *fp){
-	fprintf(fp, "\t%s x: %f + (%f)*t \n",str,  pts.x(), vecs.x());
-	fprintf(fp, "\t%s y: %f + (%f)*t \n",str,	pts.y(), vecs.y());
+	fprintf(fp, "%s x: %f + (%f)*t \n",str,  pts.x(), vecs.x());
+	fprintf(fp, "%s y: %f + (%f)*t \n",str,	pts.y(), vecs.y());
 
 }
 

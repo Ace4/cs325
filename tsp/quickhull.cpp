@@ -72,7 +72,7 @@ void hull_set(City A, City B, vector<City> &set, vector<City> &hull){
 vector<City>  quickHull(vector<City> &points_in){
 	vector<City> convexHull(0);
 	if(points_in.size() < 3){			//if our set is 3 point our hull is this set
-		City A = points_in[0]; 		//Add the first point to the end so that we connect
+		City A = points_in[0]; 			//Add the first point to the end so that we connect
 		points_in.push_back(A);
 		return points_in; 
 	}
@@ -114,10 +114,12 @@ vector<City>  quickHull(vector<City> &points_in){
 	hull_set(B,A,left_set,convexHull);
 
 	points_in.clear();
-	for(int i =0; i < right_set.size();i++){
+	for(int i =0; i < right_set.size(); i++){
+		right_set[i].Print("right set"); 
      		points_in.push_back(right_set[i]); 
 	}
-        for(int i =0; i<left_set.size(); i++){
+        for(int i =0; i < left_set.size(); i++){
+		left_set[i].Print("left set"); 
 		points_in.push_back(left_set[i]); 
 	}
 
@@ -165,23 +167,32 @@ double point_to_line(Vec2 A, Vec2 B, City point)
 //returns the line that
 vector< pair<Line, vector<City> > > determine_closest_lines(vector<Line> &hull_lines, vector<City> &points){
 	vector<float> min_dist(points.size(), INT_MAX);
-	vector<Line> min_lines(points.size()); 
+	vector<int> min_lines(points.size()); 
 	vector< pair<Line, vector<City> > > line_city_pair; 
 	for(int i = 0; i < hull_lines.size(); i++){
 		pair<Line, vector<City> > temp; 
 		temp.first = hull_lines[i]; 
 		line_city_pair.push_back(temp); 
 	} 
+
 	for(int i = 0; i < hull_lines.size(); i++){
 		for(int j = 0; j < points.size(); j++){
 			double dist = hull_lines[i].ltp(points[j]);
 			if(dist < min_dist[j]){
-				line_city_pair[i].second.push_back(points[j]); 		
-				//min_lines[j] = hull_lines[i]; 
-				//min_dist[j] = dist; 
+				//line_city_pair[i].second.push_back(points[j]); 		
+				min_lines[j] = i; 
+				min_dist[j] = dist; 
+				cout << dist <<endl;
 			}
 		}
 	}
+
+		for(int j = 0; j < min_dist.size();j++){
+			line_city_pair[min_lines[j]].second.push_back(points[j]); 
+		}
+
+	
+
 return line_city_pair; 
 }
 vector<Line> draw_lines(vector<City> &hull_points, vector<City>  &inside_points){
@@ -238,13 +249,18 @@ int main(){
 	vector<City> hull_points = quickHull(tsp); 
 	vector<Line> hull_lines = draw_lines(hull_points, tsp);	
 	vector< pair<Line, vector<City> > > closest_lines = determine_closest_lines(hull_lines, tsp);
+
+	for(int i = 0; i < tsp.size(); i++)
+		tsp[i].Print();
         for( int i =0; i < closest_lines.size(); i++){
-		tsp[i].Print();		        
-		closest_lines[i].first.Print("closest line");
-		float x = tsp[i].x() - closest_lines[i].first.vectors().x();	//= tsp[i].Dot(min_dist[i].vectors()); 
+	//	tsp[i].Print();	
+		closest_lines[i].first.Print("cities closest to this line");
+		for( int j = 0; j < closest_lines[i].second.size();j++)	
+			closest_lines[i].second[j].Print("city");
+	//	float x = tsp[i].x() - closest_lines[i].first.vectors().x();	//= tsp[i].Dot(min_dist[i].vectors()); 
 		float y = tsp[i].y() - closest_lines[i].first.vectors().y();
 		float d = sqrt( x * x + y * y); 
-		cout << "\tDistance "<< d <<endl<<endl;
+		cout << "Distance "<< d <<endl<<endl;
 		//redraw_line(min_dist[i], tsp[i]); 
 	}	
 

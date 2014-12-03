@@ -1,5 +1,6 @@
 TO run the quickhull program use the command
-g++ vec2.cpp points.cpp line.cpp quickhull.cpp
+
+g++ vec2.cpp city.cpp line.cpp quickhull.cpp
 
 quickhull has the quick hull functions init as well as a main debugger. 
 The main will need to be removed when we start using quickhull in out tsp program
