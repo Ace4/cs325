@@ -17,7 +17,9 @@ bool City::operator==(City B){
 }
 
 void City::Print(char *str, FILE *fp){
-	fprintf(fp, "%s City Number: %d \n X: %f\n Y: %f\n", str, id, pts.x() , pts.y());
+	fprintf(fp, "%s %d\n", str, id); 
+
+//	fprintf(fp, "%s City Number: %d \n X: %f\n Y: %f\n", str, id, pts.x() , pts.y());
 
 }
 

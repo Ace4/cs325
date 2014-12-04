@@ -46,15 +46,15 @@ void city_parser(string file_in, vector<City> &city_list)
 				if (n == 1) {           //city x-coord.  
 					if(token[1] != NULL)
 						x = atoi(token[1]);
-					city_list[city_ind].set_x(x);
+					city_list[n].set_x(x);
 				}
 				
 				if (n == 2) {           //city y-coord.
 					if(token[2] != NULL)
 						y = atoi(token[2]);
-					city_list[city_ind].set_y(y); //=  City(id, x, y);
+					city_list[n].set_y(y); //=  City(id, x, y);
 				}
-				if (!token[city_ind]) break;   //no more tokens
+				if (!token[n]) break;   //no more tokens
 			}
 		
 		/* increment to next city */
