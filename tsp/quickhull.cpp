@@ -218,7 +218,7 @@ void redraw_line(Line line_in, City p){
 }
 int main(){
 	vector<City> tsp; 
-	city_parser("example-input-3.txt", tsp); 
+//	city_parser("example-input-1.txt", tsp); 
 
 //	for (int j = 0; j < tsp.size(); j++) {
 //		tsp[j].Print("", stdout);
@@ -230,44 +230,18 @@ int main(){
 	data_set[1] = City (2,-5,5);
 	data_set[2] = City(3,-5,-5);
 	data_set[3] = City(4,5,-5);  
-	data_set[4] = City(5,3,1);
-	data_set[5] = City(6,3,-1);
-	data_set[6] = City(7,-3,1);
-	data_set[7] = City(8,-3,-1);
+	data_set[4] = City(5,2,2);
+	data_set[5] = City(6,2,-2);
+	data_set[6] = City(7,-2,2);
+	data_set[7] = City(8,-2,-2);
 
-/*	Line AB(data_set[0].point(),data_set[1].point());
-	Line BC(data_set[1].point(),data_set[2].point()); 
-	Line CD(data_set[2].point(),data_set[3].point());	
-	Line DA(data_set[3].point(),data_set[0].point());
+	for(int i =0; i<8;++i)
+		tsp.push_back(data_set[i]); 
 
-	double ab =	AB.ltp(data_set[4]); 
-	double bc =     BC.ltp(data_set[4]);
-	double cd =     CD.ltp(data_set[4]);
-	double da =     DA.ltp(data_set[4]);
-	
-	cout <<"abe: "  << ab <<endl;
-	cout <<"bce: "  << bc <<endl;
-	cout <<"cde: "  << cd <<endl;
-	cout <<"dae: "  << da <<endl;
-*/
-//	vector<City> tsp; 
-//	for (int i = 0; i < 8; i++){
-//		tsp.push_back(data_set[i]);
-//	}
 	vector<City> hull_points = quickHull(tsp); 
 	vector<Line> hull_lines = draw_lines(hull_points, tsp);	
 	vector< pair<Line, vector<City> > > closest_lines = determine_closest_lines(hull_lines, tsp);
 
-//	for(int i = 0; i < tsp.size(); i++)
-//		tsp[i].Print();
-//      for( int i =0; i < closest_lines.size(); i++){
-//		closest_lines[i].first.Print("cities closest to this line");
-//		for( int j = 0; j < closest_lines[i].second.size();j++)	
-//			closest_lines[i].second[j].Print("city");
-		//redraw_line(min_dist[i], tsp[i]); 
-//	}	
-
-	//A.Dot(B.Unit());
 	for(int i =0; i < closest_lines.size(); i++){
 		int *lengths = new int[closest_lines[i].second.size()];
 		 for(int j=0; j<closest_lines[i].second.size();j++){
@@ -278,10 +252,10 @@ int main(){
 
 	}
 
+		
 
 
 // I am trying to compute the total length of the solution here. 
-//
 	float tot_len = 0; 
 	for(int i = 0; i < closest_lines.size();++i){
 		int index; 
@@ -289,29 +263,17 @@ int main(){
 		float x1, x2, y1, y2; 
 		if(closest_lines[i].second.size() > 0){
 			index = closest_lines[i].second.size() -1; 
-//		 	x1 = closest_lines[i].second[index].point().x();
-//			x2 =  hull_points[i].point().x();
-//			y1 = closest_lines[i].second[index].point().y();
-//			y2 =  hull_points[i].point().y();
 			temp = closest_lines[i].second[index].point() - hull_points[i].point();		
 		}
 		else if(i < closest_lines.size() -1){
-//			x1 = hull_points[i].point().x();;
-//                      x2 =  hull_points[i+1].point().x();
-//                    y1 = hull_points[i].point().y();
-//                  y2 =  hull_points[i+1].point().y();
-//  			
 			temp =  hull_points[i+1].point() - hull_points[i].point();
 		} else {
-			 temp =  hull_points[i].point() - hull_points[0].point();
+			temp =  hull_points[i].point() - hull_points[0].point();
 		}
-		
 		tot_len += temp.Length(); 
-		//tot_len  += sqrt(((x1 - x2) * ( x1 - x2) + (y1 - y2) * (y1 - y2)));
-	
 		FILE * o_f; 
-		o_f = fopen("example-output-3.txt", "w"); 
-		hull_points[i].Print();
+		o_f = fopen("example-output-1.txt", "w"); 
+		closest_lines[i].first.Print("", o_f);
 		
 		for(int j=closest_lines[i].second.size()-1; j>=0; --j){
 			if(j > 0){
@@ -324,15 +286,6 @@ int main(){
 		}
 	}
 	cout << "total path length is: " << tot_len <<" units of space" <<endl; 
-//	closest_lines[0].second[1].Print("waaat"); 	
-//	array tuples(line array citys)
-//	Hull_Line[0][0], Hull_line[0][1] city
-//	vector< pair<Line,vector<City> > > closest_line_pair;
-//	pair<Line,vector<City> > temp;
-//	temp.first = hull_lines[0]; 
-//	temp.second.push_back( tsp[0]); 
-//	closest_line_pair.push_back(temp); 
-//	closest_line_pair[0].first.Print();
 
 return 0;
 } 
