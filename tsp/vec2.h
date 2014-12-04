@@ -19,6 +19,8 @@ class Vec2
         Vec2    operator-( const Vec2& );       // binary -
         Vec2    operator-( );                   // unary -
 	Vec2	operator*( const Vec2& );
+	void	set_x(float x) {v0 = x;};
+	void	set_y(float y) {v1 = y;};
 	float	x() {return v0;};
 	float 	y() {return v1;};
 	float   Cross( Vec2& );

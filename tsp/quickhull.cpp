@@ -1,8 +1,8 @@
-#include "qs.h"
 #include <limits.h>
 #include <vector> 
 #include <algorithm>
 #include <stdio.h>
+#include "parser.h"
 //part of the quick hull algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html
 int point_location(City A, City B, City P){
         int cp1 = (B.x() - A.x())*(P.y()-A.y()) - (B.y()-A.y())*(P.x()-A.x());
@@ -96,7 +96,6 @@ vector<City>  quickHull(vector<City> &points_in){
 	City B = points_in[maxCity]; 
 	convexHull.push_back(A);
 	convexHull.push_back(B); 
-	int x =	convexHull.size();
 	points_in.erase(points_in.begin() + minCity);
 	points_in.erase(points_in.begin() + maxCity); 
 	
@@ -216,6 +215,15 @@ void redraw_line(Line line_in, City p){
 //	p_to_end.Print();
 }
 int main(){
+	vector<City> city_list; 
+	city_parser("example-input-1.txt", city_list); 
+
+	cout << "\t" <<city_list.size() <<endl;
+	for (int j = 0; j < city_list.size(); j++) {
+		city_list[j].Print("", stdout);
+	}
+
+
 	City  data_set[8] = City();
  	data_set[0] = City(1,5,5); 
 	data_set[1] = City (2,-5,5);
@@ -241,7 +249,6 @@ int main(){
 	cout <<"dae: "  << da <<endl;
 */
 	vector<City> tsp; 
-	int i = 0;
 	for (int i = 0; i < 8; i++){
 		tsp.push_back(data_set[i]);
 	}

@@ -1,21 +1,12 @@
-#include "city.h"
-
-#include <iostream>
-#include <fstream>
-#include <cstring>
-
-#include <stdio.h>
-#include <stdlib.h>
-
+#include "parser.h"
 using std::ifstream;
 
-const int MAX_CHARS_PER_LINE = 512;
-const int MAX_TOKENS_PER_LINE = 4;
-const char* const DELIMITER = " ";
-
-int main()
+void city_parser(string file_in, vector<City> &city_list)
 {
-	City city_list[76] = City();
+	const int MAX_CHARS_PER_LINE = 512;
+	const int MAX_TOKENS_PER_LINE = 4;
+	const char* const DELIMITER = " ";
+
 
 	int n,city_ind = 0;
 	int id, x, y;
@@ -26,46 +17,53 @@ int main()
 
 	/* create a file-reading obj */
 	ifstream f_in;
+	
 
-	f_in.open("example-input-1.txt");
+	f_in.open(file_in.c_str()); // , fstream::in);
 	if (!f_in.good() ) {
-		return 1;                               //exit if file not found
+		printf ("Error opening file\n");
+		exit(EXIT_FAILURE);                               //exit if file not found
 	}
 
-	x = y = 0;
+	id = x = y = 0;
 	while (!f_in.eof() ) {
 		/* read an entire line into memory */
 		f_in.getline(buf, MAX_CHARS_PER_LINE);
 
 		/* parse the line and extract first token */
-		token[0] = strtok(buf, DELIMITER);
-		id = atoi(token[0]);
-		city_list[city_ind] = City(id, x, y );  //city id    
+		if(buf != NULL){
+			token[0] = strtok(buf, DELIMITER);
+				if(token[0] != NULL)
+				id = atoi(token[0]);
+		}
+
+		city_list.push_back(City(id, x, y ));  //city id    
 
 		if (token[0]) {                         //zero if line is blank
 			for (n = 1; n < MAX_TOKENS_PER_LINE; n++) {
 				token[n] = strtok(0, DELIMITER); 
 
 				if (n == 1) {           //city x-coord.  
-					x = atoi(token[1]);
-					city_list[city_ind] = City(id, x, y);
+					if(token[1] != NULL)
+						x = atoi(token[1]);
+					city_list[city_ind].set_x(x);
 				}
 				
 				if (n == 2) {           //city y-coord.
-					y = atoi(token[2]);
-					city_list[city_ind] = City(id, x, y);
+					if(token[2] != NULL)
+						y = atoi(token[2]);
+					city_list[city_ind].set_y(y); //=  City(id, x, y);
 				}
-				if (!token[n]) break;   //no more tokens
+				if (!token[city_ind]) break;   //no more tokens
 			}
-		}
+		
 		/* increment to next city */
 		city_ind++;
+		}
 	}
 	
-	for (int j = 0; j < 76; j++) {
-		city_list[j].Print();
-	}
-	
-	return 0;
+//	for (int j = 0; j < city_list.size() ; j++) {
+//		city_list[j].Print();
+//	}
 }
 
