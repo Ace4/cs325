@@ -19,7 +19,7 @@ void city_parser(string file_in, vector<City> &city_list)
 	ifstream f_in;
 	
 
-	f_in.open(file_in.c_str()); // , fstream::in);
+	f_in.open(file_in.c_str(), fstream::in); // , fstream::in);
 	if (!f_in.good() ) {
 		printf ("Error opening file\n");
 		exit(EXIT_FAILURE);                               //exit if file not found

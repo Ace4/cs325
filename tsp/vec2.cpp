@@ -69,9 +69,9 @@ float Vec2::Dot( Vec2& that )
 	return d;
 }
 
-float Vec2::Length()
+long double Vec2::Length()
 {
-	float len = sqrt(pow(this->v0,2) +pow(this->v1,2));
+	long double len = sqrt(((this->v0 * this->v0) + (this->v1 * this->v1)));
 	return len;
 }
 

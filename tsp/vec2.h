@@ -27,7 +27,7 @@ class Vec2
         float   Dot( Vec2& );
       	Vec2	Shoot(const Vec2&, float t);
 	void	CreateLine(const Vec2&, const Vec2&);
-	float   Length( );
+	long double   Length( );
         void    Print( char * = "", FILE * = stderr );
         Vec2    Unit( );
 

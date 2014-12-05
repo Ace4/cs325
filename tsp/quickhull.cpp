@@ -267,9 +267,9 @@ void hull_sort(vector<City> &hull_points, int i){
 }
 int main(){
 	vector<City> tsp; 
-	city_parser("input-test3.txt", tsp); 	
+	city_parser("input-test2.txt", tsp); 	
 	FILE * o_f;
-	o_f = fopen("output-test3.txt", "w");
+	o_f = fopen("output-test2.txt", "w");
 
 
 
@@ -331,36 +331,31 @@ int main(){
 //		}
 //	}		
  
-// I am trying to compute the total length of the solution here. 
+// compute our walk. 
 	float tot_len = 0; 
+	vector<City> walk; 
 	for(int i = 0; i < closest_lines.size();++i){
-		int index; 
-		Vec2 temp;
-		float x1, x2, y1, y2; 
-		if(closest_lines[i].second.size() > 0){
-			index = closest_lines[i].second.size() -1; 
-			temp = closest_lines[i].second[index].point() - hull_points[i].point();		
-		}
-		else if(i < closest_lines.size() -1){
-			temp =  hull_points[i+1].point() - hull_points[i].point();
-		} else {
-			temp =  hull_points[i].point() - hull_points[0].point();
-		}
-		tot_len += temp.Length(); 
-		hull_points[i].Print("", o_f); 
-//		closest_lines[i].first.Print("", o_f);
-//		cout << closest_lines[i].second.size() <<endl;		
+		walk.push_back(hull_points[i]); 
 		for(int j = 0; j < closest_lines[i].second.size(); ++j){
-			if(j > 0){
-				temp =  closest_lines[i].second[j].point() - closest_lines[i].second[j-1].point(); 
-			}
-			else 
-				temp =  closest_lines[i].second[j].point() - hull_points[i+1].point();
-		//	cout << "wttttff" << endl; 
-			tot_len += temp.Length();
-			closest_lines[i].second[j].Print("", o_f); 
+			walk.push_back(closest_lines[i].second[j]); 
 		}
 	}
+
+//compute total length
+	for(int i =0; i < walk.size(); i++){
+//		walk[i].Print("",o_f);
+		if(i > 0)
+			tot_len += (walk[i].point() - walk[i-1].point()).Length();
+		else
+			tot_len += (walk[i].point() - walk[0].point()).Length();
+	}
+
+//print solutionte total length
+//	fprintf(o_f, " %i",tot_len); 
+        for(int i =0; i < walk.size(); i++){
+                        walk[i].Print("",o_f);
+	}
+//
 	cout << "total path length is: " << tot_len <<" units of space" <<endl; 
  
 
