@@ -37,7 +37,6 @@ void city_parser(string file_in, vector<City> &city_list)
 				id = atoi(token[0]);
 		}
 
-		city_list.push_back(City(id, x, y ));  //city id    
 
 		if (token[0]) {                         //zero if line is blank
 			for (n = 1; n < MAX_TOKENS_PER_LINE; n++) {
@@ -46,17 +45,16 @@ void city_parser(string file_in, vector<City> &city_list)
 				if (n == 1) {           //city x-coord.  
 					if(token[1] != NULL)
 						x = atoi(token[1]);
-					city_list[n].set_x(x);
 				}
 				
 				if (n == 2) {           //city y-coord.
 					if(token[2] != NULL)
 						y = atoi(token[2]);
-					city_list[n].set_y(y); //=  City(id, x, y);
 				}
 				if (!token[n]) break;   //no more tokens
 			}
-		
+	
+		city_list.push_back(City(id, x, y ));
 		/* increment to next city */
 		city_ind++;
 		}
