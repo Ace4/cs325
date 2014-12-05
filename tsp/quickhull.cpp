@@ -342,12 +342,10 @@ int main(){
 	}
 
 //compute total length
+	Vec2 temp; 
 	for(int i =0; i < walk.size(); i++){
-//		walk[i].Print("",o_f);
-		if(i > 0)
-			tot_len += (walk[i].point() - walk[i-1].point()).Length();
-		else
-			tot_len += (walk[i].point() - walk[0].point()).Length();
+		temp = walk[i].point() - walk[i-1].point();
+		tot_len += temp.Length();
 	}
 
 //print solutionte total length
