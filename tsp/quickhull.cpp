@@ -31,7 +31,7 @@ void hull_set(City A, City B, vector<City> &set, vector<City> &hull){
 		return;
 	if (set.size() == 0){
 		City p = set[0];
-		set.erase(set.begin()); 
+		//set.erase(set.begin()); 
 		hull.insert(hull.begin() + insert_position, p); 
 		return;
 	}
@@ -55,7 +55,7 @@ void hull_set(City A, City B, vector<City> &set, vector<City> &hull){
 	hull.insert(hull.begin()+insert_position,P);
 	set.erase(set.begin() + furthestCity);
 //	 for(int i = 0; i <set.size(); i++)
-//                set[i].Print("set");
+//              set[i].Print("set");
 
 
 	vector<City> leftSetAP(0); 
@@ -77,13 +77,22 @@ void hull_set(City A, City B, vector<City> &set, vector<City> &hull){
 	}
 	
            
-	hull_set(A,P,set,hull);
-	hull_set(P,B,set,hull);
+	hull_set(A,P,leftSetAP,hull);
+	hull_set(P,B,leftSetPB,hull);
+
+//	for(int i =0; i < leftSetPB.size(); i++){
+  //              leftSetPB[i].Print("right set");
+    //            set.push_back(leftSetPB[i]);
+      //  }
+        //for(int i =0; i < leftSetAP.size(); i++){
+       //         leftSetAP[i].Print("left set");
+         //       set.push_back(leftSetAP[i]);
+       // }
 
 }
 
 //qucikHull algorithm based on algorithm based on http://www.ahristov.com/tutorial/geometry-games/convex-hull.html java implimentation
-vector<City> quickHull(vector<City> &points_in){
+vector<City> quickHull(vector<City> points_in){
 	vector<City> convexHull(0);
 	if(points_in.size() < 3){			//if our set is 3 point our hull is this set
 							//		City A = points_in[0];	//Add the first point to the end so that we connect
@@ -130,11 +139,11 @@ vector<City> quickHull(vector<City> &points_in){
 
 	points_in.clear();
 	for(int i =0; i < right_set.size(); i++){
-//		right_set[i].Print("right set"); 
+		//right_set[i].Print("right set"); 
      		points_in.push_back(right_set[i]); 
 	}
-        for(int i =0; i < left_set.size(); i++){
-//		left_set[i].Print("left set"); 
+	      for(int i =0; i < left_set.size(); i++){
+		//left_set[i].Print("left set"); 
 		points_in.push_back(left_set[i]); 
 	}
 
@@ -181,6 +190,7 @@ double point_to_line(Vec2 A, Vec2 B, City point)
 
 //returns the line that
 vector< pair<Line, vector<City> > > determine_closest_lines(vector<Line> &hull_lines, vector<City> &points){
+//	cout << points.size() << endl; 
 	vector<float> min_dist(points.size(), INT_MAX);
 	vector<int> min_lines(points.size()); 
 	vector< pair<Line, vector<City> > > line_city_pair; 
@@ -196,7 +206,8 @@ vector< pair<Line, vector<City> > > determine_closest_lines(vector<Line> &hull_l
 			if(dist < min_dist[j]){
 				//line_city_pair[i].second.push_back(points[j]); 		
 				min_lines[j] = i; 
-				min_dist[j] = dist; 
+				min_dist[i] = dist; 
+				//cout << min_dist[j] << endl;
 			}
 		}
 	}
@@ -209,7 +220,8 @@ vector< pair<Line, vector<City> > > determine_closest_lines(vector<Line> &hull_l
 
 return line_city_pair; 
 }
-vector<Line> draw_lines(vector<City> &hull_points, vector<City>  &inside_points){
+
+vector<Line> draw_lines(vector<City> &hull_points, vector<City> &inside_points){
 	vector<Line> hull_lines;
 	for(int i = 0; i < hull_points.size(); i++){
 		if(i == hull_points.size()-1)
@@ -230,38 +242,77 @@ void redraw_line(Line line_in, City p){
 //	start_to_P.Print();
 //	p_to_end.Print();
 }
+
+void hull_sort(vector<City> &hull_points, int i){
+	long double min_dist = -1; 
+	int min_index = 0; 
+
+	for(int j = i+1; j < hull_points.size(); j++){
+		Vec2 temp = hull_points[j].point() - hull_points[i].point();
+//		cout << j << min_dist <<endl; 
+		if( temp.Length() < min_dist || min_dist < 0){
+		 	min_dist = temp.Length(); 
+			min_index = j;
+		}
+	}
+	
+//	hull_points[min_index].Print("closest points"); 
+	City temp = hull_points[i+1]; 	
+	hull_points[i+1] = hull_points[min_index]; 
+	hull_points[min_index] = temp; 
+//swap with the one that is i + 1 
+
+	if(i+1 < hull_points.size()-1)
+		hull_sort(hull_points, i+1); 
+}
 int main(){
 	vector<City> tsp; 
-	city_parser("example-input-2.txt", tsp); 
-
-//	for (int j = 0; j < tsp.size(); j++) {
-//		tsp[j].Print("", stdout);
-//	}
+	city_parser("input-test3.txt", tsp); 	
+	FILE * o_f;
+	o_f = fopen("output-test3.txt", "w");
 
 
-	City  data_set[9] = City();
- 	data_set[0] = City(1,5,5); 
-	data_set[1] = City (2,-5,5);
-	data_set[2] = City(3,-5,-5);
-	data_set[3] = City(4,5,-5);  
+
+	City  data_set[6] = City();
+ 	data_set[0] = City(1,15,3); 
+	data_set[1] = City(2,9,0);
+	data_set[2] = City(3,2,8);
+	data_set[3] = City(4,11,6);  
 	data_set[4] = City(5,2,2);
-	data_set[5] = City(6,2,-2);
-	data_set[6] = City(7,-2,2);
-	data_set[7] = City(8,-2,-2);
-	data_set[8] = City(9,2,6);
-//	for(int i =0; i<9;++i)
-//		tsp.push_back(data_set[i]); 
+	data_set[5] = City(6,8,9);
+
+//	for(int i = 0; i< tsp.size(); ++i)
+//		tsp[i].Print("before");
 
 	vector<City> hull_points = quickHull(tsp); 
+
+	int remove_index = 0;  
+
+	for(int i =0; i <hull_points.size();i++){
+		remove_index =  find(tsp.begin(), tsp.end(), hull_points[i]) -  tsp.begin();
+		tsp.erase(tsp.begin() + remove_index);
+	}	
+//	for(int i = 0; i< tsp.size(); ++i)
+//		tsp[i].Print("after"); 
+
+//	for(int i =0; i <hull_points.size();++i)
+//		hull_points[i].Print("tsp"); 
+
+	hull_sort(hull_points, 0);
 	vector<Line> hull_lines = draw_lines(hull_points, tsp);	
 
-/*	for(int i = 0; i <tsp.size();i++)
-		tsp[i].Print();
 
-	for(int i =0; i<hull_points.size();i++)
+//	for(int i = 0; i <tsp.size();i++)
+//		tsp[i].Print();
+
+/*	for(int i =0; i<hull_points.size();i++)
 		hull_points[i].Print();
 */
+
 	vector< pair<Line, vector<City> > > closest_lines = determine_closest_lines(hull_lines, tsp);
+
+//	for(int i = 0; i < tsp.size(); i++)	
+//		closest_lines[i].second.push_back(tsp[i]);
 
 	for(int i =0; i < closest_lines.size(); i++){
 		int *lengths = new int[closest_lines[i].second.size()];
@@ -270,8 +321,8 @@ int main(){
 			lengths[j] = closest_lines[i].second[j].point().Dot(temp);
 		 }
 		quickCitySort(closest_lines[i].second, lengths, 0, closest_lines[i].second.size()-1); 
-
 	}
+
 
 //	for(int i =0; i<closest_lines.size();i++){
 //		hull_points[i].Print(); 
@@ -296,19 +347,18 @@ int main(){
 			temp =  hull_points[i].point() - hull_points[0].point();
 		}
 		tot_len += temp.Length(); 
-		FILE * o_f; 
-		o_f = fopen("example-output-1.txt", "w"); 
-		hull_points[i].Print(); 
+		hull_points[i].Print("", o_f); 
 //		closest_lines[i].first.Print("", o_f);
-		
-		for(int j=closest_lines[i].second.size()-1; j>=0; --j){
+//		cout << closest_lines[i].second.size() <<endl;		
+		for(int j = 0; j < closest_lines[i].second.size(); ++j){
 			if(j > 0){
 				temp =  closest_lines[i].second[j].point() - closest_lines[i].second[j-1].point(); 
 			}
 			else 
 				temp =  closest_lines[i].second[j].point() - hull_points[i+1].point();
+		//	cout << "wttttff" << endl; 
 			tot_len += temp.Length();
-			closest_lines[i].second[j].Print(); 
+			closest_lines[i].second[j].Print("", o_f); 
 		}
 	}
 	cout << "total path length is: " << tot_len <<" units of space" <<endl; 
