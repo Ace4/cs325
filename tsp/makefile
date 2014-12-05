@@ -8,4 +8,4 @@ TARGET2 =  vec2.cpp city.cpp line.cpp parser.cpp qs.cpp quickhull.cpp
 
 
 project2: ${TARGETCPP}
-	${CPP} -o tsp_solver  $(TARGET2) 
+	${CPP} -o tsp_solver  $(TARGET2) -w
