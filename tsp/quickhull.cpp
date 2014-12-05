@@ -267,9 +267,9 @@ void hull_sort(vector<City> &hull_points, int i){
 }
 int main(){
 	vector<City> tsp; 
-	city_parser("input-test2.txt", tsp); 	
+	city_parser("input-test1.txt", tsp); 	
 	FILE * o_f;
-	o_f = fopen("output-test2.txt", "w");
+	o_f = fopen("output-test1.txt", "w");
 
 
 
@@ -342,10 +342,17 @@ int main(){
 	}
 
 //compute total length
-	Vec2 temp; 
+	Vec2 temp;
+	float tempy; 
 	for(int i =0; i < walk.size(); i++){
-		temp = walk[i].point() - walk[i-1].point();
-		tot_len += temp.Length();
+		float a0 = walk[i].point().x();
+		float b0 = walk[i-1].point().x();
+		float a1 = walk[i].point().y();
+		float b1 = walk[i-1].point().y();
+		float dx = a0 - b0;
+		float dy = a1 - b1;
+		tempy = rint(sqrt(dx*dx + dy*dy));
+		tot_len += tempy;
 	}
 
 //print solutionte total length
