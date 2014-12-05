@@ -267,9 +267,9 @@ void hull_sort(vector<City> &hull_points, int i){
 }
 int main(){
 	vector<City> tsp; 
-	city_parser("input-test1.txt", tsp); 	
+	city_parser("input-test2.txt", tsp); 	
 	FILE * o_f;
-	o_f = fopen("output-test1.txt", "w");
+	o_f = fopen("output-test2.txt", "w");
 
 
 
@@ -356,7 +356,7 @@ int main(){
 	}
 
 //print solutionte total length
-//	fprintf(o_f, " %i",tot_len); 
+	fprintf(o_f, " %i\n",int(tot_len)); 
         for(int i =0; i < walk.size(); i++){
                         walk[i].Print("",o_f);
 	}
